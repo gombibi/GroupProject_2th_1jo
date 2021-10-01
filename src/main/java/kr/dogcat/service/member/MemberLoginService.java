@@ -7,6 +7,7 @@ import javax.servlet.http.HttpSession;
 import kr.dogcat.action.Action;
 import kr.dogcat.action.ActionForward;
 import kr.dogcat.dao.MemberDao;
+import kr.dogcat.dto.Member;
 
 public class MemberLoginService implements Action {
 
@@ -15,21 +16,22 @@ public class MemberLoginService implements Action {
 
 		ActionForward forward = null;
 		String email = request.getParameter("email");
-		String pwd = request.getParameter("pwd");
-		
-		HttpSession session = request.getSession();
-		session.setAttribute("userEmail", email);
-
+		String mpwd = request.getParameter("mpwd");
 
 		try {
 			MemberDao dao = new MemberDao(); // POINT
-			Boolean result = dao.checkEmailPwd(email, pwd);
+			Boolean result = dao.checkEmailPwd(email, mpwd);
 
 			String msg = "";
 			String url = "";
+			
 			if (result) {
-				// Top.jsp 정보 로그인 상태 ...
-
+				// Top.jsp 정보 로그인 상태 반영하기
+				Member m = dao.getMemberInfoByEmail(email);
+				
+				HttpSession session = request.getSession();
+				session.setAttribute("loginUser", m);
+				
 				// 이동처리
 				url = "Main.jsp";
 
@@ -39,7 +41,7 @@ public class MemberLoginService implements Action {
 
 			} else {
 				msg = "로그인 실패";
-				url = "Login.jsp"; //front 주소 확인
+				url = "Login_temp.jsp"; //front 주소 확인
 				
 				request.setAttribute("board_msg",msg);
 			    request.setAttribute("board_url", url);

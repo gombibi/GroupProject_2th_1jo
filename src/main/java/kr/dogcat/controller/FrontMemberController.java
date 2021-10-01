@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import kr.dogcat.action.Action;
 import kr.dogcat.action.ActionForward;
+import kr.dogcat.service.member.MemberDeleteService;
 import kr.dogcat.service.member.MemberIdCheckService;
 import kr.dogcat.service.member.MemberJoinService;
 import kr.dogcat.service.member.MemberLoginService;
@@ -47,9 +48,13 @@ public class FrontMemberController extends HttpServlet {
     		forward = action.execute(request, response);
     		System.out.println("MemberLoginService 실행");
     		
-    	}
+    	}else if(url_Command.equals("/MemberDelete.me")) { //회원 삭제
+    		//UI+로직
+    		action = new MemberDeleteService();
+    		forward = action.execute(request, response);
+    		System.out.println("MemberDeleteService 실행");
     	
-    	if(forward != null) {
+    	}if(forward != null) {
     		if(forward.isRedirect()) { //true 
     			response.sendRedirect(forward.getPath());
     		}else { //false (모든 자원 ) 사용

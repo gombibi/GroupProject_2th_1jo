@@ -19,11 +19,14 @@ public class MemberIdCheckService implements Action {
 			String email = request.getParameter("email");
 	       	MemberDao dao = new MemberDao();
 	       	emailCheck = dao.isCheckByEmail(email);
+	       	
 	    	request.setAttribute("message", emailCheck);
+	    	
+	    	System.out.println("emailcheck : " + emailCheck);
 	    	
 	    	forward = new ActionForward();
 	    	forward.setRedirect(false);
-	    	forward.setPath("WEB-INF/views/member/uservalid.jsp"); //front 페이지 주소 확인
+	    	forward.setPath("uservalid.jsp"); //front 페이지 주소 확인
 	    	
 		}catch (Exception e) {
 			System.out.println(e.getMessage());
