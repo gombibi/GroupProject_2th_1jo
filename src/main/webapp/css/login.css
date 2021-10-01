@@ -1,0 +1,19 @@
+@charset "UTF-8";
+
+
+body{
+		font-size: 15pt;
+		min-width: 800px;
+	}
+
+#loginhere{
+ 		text-align: center; 
+		padding-top: 150px;
+		display: flex;
+		flex-direction:row;
+		justify-content: center;
+		
+	}
+ th{
+		padding-bottom: 10px;
+	}
