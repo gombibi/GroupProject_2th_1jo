@@ -12,11 +12,6 @@ import javax.sql.DataSource;
 
 //POOL
 public class ConnectionHelper {
-	
-	public static Connection getOracleConnection() {
-		return getConnection("oracle");
-	}
-	
 	public static Connection getConnection(String dbname) {
 
 		if (dbname.toLowerCase().equals("oracle")) {

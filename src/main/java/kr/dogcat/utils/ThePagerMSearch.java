@@ -1,20 +1,23 @@
 package kr.dogcat.utils;
 
-public class ThePager {
-	 
+public class ThePagerMSearch {
 	 private int pageSize;//한 페이지당 데이터 개수
 	 private int pagerSize;//번호로 보여주는 페이지 Link 개수
 	 private int dataCount;//총 데이터 수
 	 private int currentPage;//현재 페이지 번호
 	 private int pageCount;//총 페이지 수
+	 private String option;//검색 옵션
+	 private String searchword;//검색 단어
 	 
 	 private String linkUrl;//페이저가 포함되는 페이지의 주소
 	 
-	 public ThePager(int dataCount, int currentPage, 
+	 public ThePagerMSearch(String option, String searchword, int dataCount, int currentPage, 
 	  int pageSize, int pagerSize, String linkUrl) {
 	  
 	  this.linkUrl = linkUrl;
 	  
+	  this.option = option;
+	  this.searchword = searchword;
 	  this.dataCount = dataCount; // 총 게시물 개수
 	  this.pageSize = pageSize; // 5 10 15 20
 	  this.pagerSize = pagerSize; // 3
@@ -27,15 +30,15 @@ public class ThePager {
 	 
 	 public String toString(){
 	  StringBuffer linkString = new StringBuffer();
-	   
+	  
 	  //1. 처음, 이전 항목 만들기  -- 번호 리스트 좌측
 	  if (currentPage > 1) {
 	   linkString.append(
-	    String.format("[<a href='%s?cp=1'>처음</a>]",linkUrl));
+	    String.format("[<a href='%s?cp=1?option=%s&searchword=%s'>처음</a>]",linkUrl,option,searchword));
 	   linkString.append("&nbsp;");
 	   linkString.append("&nbsp;");
 	   linkString.append(String.format(
-	    "[<a href='%s?cp=%d'>이전</a>]", linkUrl, currentPage - 1));
+	    "[<a href='%s?cp=%d?option=%s&searchword=%s'>이전</a>]", linkUrl, currentPage - 1,option,searchword));
 	   linkString.append("&nbsp;");
 	  }
 	  
@@ -52,23 +55,23 @@ public class ThePager {
 	    linkString.append(String.format("[%d]", i));
 	   } else { 
 	    linkString.append(String.format( // 그렇지 않으면 i에 해당하는 페이지에 해당하는 번호 형성 ( !!! [ ] 괄호 없음 )
-	     "<a href='%s?cp=%d'>%d</a>", linkUrl, i, i));
+	     "<a href='%s?cp=%d?option=%s&searchword=%s'>%d</a>", linkUrl, i, i,option,searchword));
 	   }
 	   linkString.append("&nbsp;");
 	  }
+	  
 	  
 	  //3. 다음, 마지막 항목 만들기 -- 번호 리스트 우측
 	  if (currentPage < pageCount) { // 현재페이지가 총 페이지보다 작다면
 	   linkString.append("&nbsp;");
 	   linkString.append(String.format(
-	    "[<a href='%s?cp=%d'>다음</a>]",linkUrl, currentPage + 1)); // 다음으로 가는 페이지 형성
+	    "[<a href='%s?cp=%d?option=%s&searchword=%s'>다음</a>]",linkUrl, currentPage + 1,option,searchword)); // 다음으로 가는 페이지 형성
 	   linkString.append("&nbsp;");
 	   linkString.append("&nbsp;");
 	   linkString.append(String.format(
-	    "[<a href='%s?cp=%d'>마지막</a>]", linkUrl, pageCount)); // 마지막으로 가는 페이지 형성
+	    "[<a href='%s?cp=%d?option=%s&searchword=%s'>마지막</a>]", linkUrl, pageCount,option,searchword)); // 마지막으로 가는 페이지 형성
 	  }
 	  
 	  return linkString.toString();
 	 }
-	 
-	}
+}
