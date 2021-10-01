@@ -65,9 +65,4 @@ public class Member {
 				+ ", mphone=" + mphone + "]";
 	}
 	
-	
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> c7de48ae96c55a1975325e78110393d4f0eaccfb
