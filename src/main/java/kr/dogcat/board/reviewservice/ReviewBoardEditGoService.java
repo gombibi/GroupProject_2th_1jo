@@ -51,7 +51,7 @@ public class ReviewBoardEditGoService implements Action {
 			
 			forward = new ActionForward();
 			forward.setRedirect(false);
-			forward.setPath("/WEB-INF/views/board/redirect.jsp");
+			forward.setPath("/WEB-INF/views/redirect.jsp");
 			
 		}else if(!useremail.equals(email)){
 			
@@ -81,7 +81,7 @@ public class ReviewBoardEditGoService implements Action {
 					
 					forward = new ActionForward();
 					forward.setRedirect(false);
-					forward.setPath("/WEB-INF/views/board/redirect.jsp");
+					forward.setPath("/WEB-INF/views/redirect.jsp");
 					
 				}else {
 					
@@ -90,7 +90,7 @@ public class ReviewBoardEditGoService implements Action {
 					
 					forward = new ActionForward();
 					forward.setRedirect(false);
-					forward.setPath("/WEB-INF/views/board/board_edit.jsp");
+					forward.setPath("/WEB-INF/views/rboard/reviewupdate.jsp");
 					
 				}
 

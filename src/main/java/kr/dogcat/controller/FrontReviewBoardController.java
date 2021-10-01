@@ -58,12 +58,12 @@ public class FrontReviewBoardController extends HttpServlet {
     			
     			forward = new ActionForward();
     			forward.setRedirect(false);
-    			forward.setPath("/WEB-INF/views/board/redirect.jsp");
+    			forward.setPath("/WEB-INF/views/redirect.jsp");
     			
     		}else {
     		
     		forward.setRedirect(false);
-    		forward.setPath("/WEB-INF/views/board/board_write.jsp");
+    		forward.setPath("/WEB-INF/views/rboard/reviewupload.jsp");
     		
     		}
     		

@@ -33,7 +33,7 @@ public class ReviewBoardRewriteGoService implements Action{
 			
 			forward = new ActionForward();
 			forward.setRedirect(false);
-			forward.setPath("/WEB-INF/views/board/redirect.jsp");
+			forward.setPath("/WEB-INF/views/redirect.jsp");
 			
 		}else {
 
@@ -58,7 +58,7 @@ public class ReviewBoardRewriteGoService implements Action{
 		
 
 		forward.setRedirect(false);
-		forward.setPath("/WEB-INF/views/board/board_rewrite.jsp");
+		forward.setPath("/WEB-INF/views/rboard/reviewupload.jsp");
 		
 		}
 		

@@ -58,7 +58,7 @@
 <!--responsive.css-->
 <link rel="stylesheet" href="css/responsive.css" />
 
-<!--날씨차트 css...-->
+<!--차트 css...-->
 <link rel="stylesheet" href="css/chartapi.css" />
 
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -177,8 +177,11 @@
 	<div id="chart_data">
 		<h1>이용 통계</h1>
 		<h3>월별 서비스 이용 현황</h3>
+			<a href="ReviewBoardList.bd">되냐?</a>
 	</div>
 	<div id="chart_div"></div>
+	
+
 
 
 

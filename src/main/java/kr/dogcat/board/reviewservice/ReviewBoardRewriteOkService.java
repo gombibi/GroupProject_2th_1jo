@@ -50,7 +50,7 @@ public class ReviewBoardRewriteOkService implements Action {
 		
 		ActionForward forward = new ActionForward();
 		forward.setRedirect(false);
-		forward.setPath("/WEB-INF/views/board/redirect.jsp");
+		forward.setPath("/WEB-INF/views/redirect.jsp");
 		
 		return forward;
 	}

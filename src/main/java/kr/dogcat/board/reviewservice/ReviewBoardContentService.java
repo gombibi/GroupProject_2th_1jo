@@ -52,7 +52,7 @@ public class ReviewBoardContentService implements Action {
 			
 			forward = new ActionForward();
 			forward.setRedirect(false); // forward
-			forward.setPath("/WEB-INF/views/board/board_content.jsp");
+			forward.setPath("/WEB-INF/views/rboard/reviewboard.jsp");
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

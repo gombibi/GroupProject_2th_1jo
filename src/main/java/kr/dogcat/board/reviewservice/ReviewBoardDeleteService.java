@@ -64,7 +64,7 @@ public class ReviewBoardDeleteService implements Action {
 		
 
 		forward.setRedirect(false); // forward
-		forward.setPath("/WEB-INF/views/board/redirect.jsp");
+		forward.setPath("/WEB-INF/views/redirect.jsp");
 
 		return forward;
 		

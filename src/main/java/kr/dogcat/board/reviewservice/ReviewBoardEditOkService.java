@@ -42,7 +42,7 @@ public class ReviewBoardEditOkService implements Action {
 			
 			forward = new ActionForward();
 			forward.setRedirect(false);
-			forward.setPath("/WEB-INF/views/board/redirect.jsp");
+			forward.setPath("/WEB-INF/views/redirect.jsp");
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
