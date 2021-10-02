@@ -37,6 +37,9 @@
 <!--responsive.css-->
 <link rel="stylesheet" href="css/responsive.css" />
 
+<!--reviewboard.css-->
+<link rel="stylesheet" href="css/reviewboard.css" />
+
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 <!--[if lt IE 9]>
@@ -55,6 +58,7 @@
 </style>
 
 <style type="text/css">
+
 #riveiwBoardListContainer {
 	padding-top: 100px;
 	display: flex;
@@ -77,31 +81,12 @@ h1 {
 	width: 800px;
 }
 
-#rboarddiv {
-	border: 1px solid #00d8d5;
-	padding: 50px;
-}
-
-#rboard_td {
-	padding: 5px;
-	width: 10%
-}
-
-#reviewboard_write, #reviewboard_write_radio {
-	padding: 30px;
-	text-align: center;
-}
-
 input {
 	width: 100%;
 	height: 30px;
 	border: solid 2px #00d8d5;
 	border-radius: 8px;
 	display : flex;
-}
-
-#point1, #point2, #point3, #point4, #point5 {
-	height: 17px;
 }
 
 #rbcont {
@@ -115,6 +100,7 @@ input {
     align-items: center;
     justify-content: center;
 }
+
 
 </style>
 
@@ -160,8 +146,8 @@ input {
 						<td id="rboard_td">내　용</td>
 						<td id="rboard_input_text" colspan="5"><textarea name="rbcont" id="rbcont"></textarea></td>
 					</tr>
-					<tr>
-						<td colspan="6" align="center">
+					<tr id="review_write_btn">
+						<td colspan="6" align="center" id="review_write_btn">
 						<input type="submit" class="about-view packages-btn" value="작성완료">
 						</td>
 					</tr>

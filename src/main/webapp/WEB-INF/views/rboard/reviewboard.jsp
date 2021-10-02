@@ -36,6 +36,8 @@
 <link rel="stylesheet" href="css/style.css" />
 <!--responsive.css-->
 <link rel="stylesheet" href="css/responsive.css" />
+<!--reviewboard.css-->
+<link rel="stylesheet" href="css/reviewboard.css" />
 
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -47,55 +49,11 @@
 <link
 	href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@100,300,400,500,700,900"
 	rel="stylesheet" />
-	
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap');
 </style>
-
-<style type="text/css">
-
-#reveiwBoardListContainer {
-	padding-top: 100px;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	font-family: 'Noto Sans KR', sans-serif;
-}
-
-h1{
-font-family: 'jua';
-}
-
-#reveiwBoardListContainer > table{
-  width:100%;
-}
-
-#reviewboard {
-    width: 1000px;
-    border-collapse:collapse;
-}
-
-#reviewboard_header {
-  background:#00d8d5;
-  color:white;
-}
-
-#reviewboard_body {
-    border-collapse:collapse;
-}
-
-th,td{
-  padding: 5px;
-}
-
-#reviewboard > tbody tr:hover:not(#reviewboard_header):not(#review_write_btn) {
-	background: whitesmoke;
-	color:#00d8d5;
-}
-</style>
-
 </head>
+
 <body>
 	<c:set var="pagesize" value="${requestScope.pagesize}"></c:set>
 	<c:set var="cpage" value="${requestScope.cpage}"></c:set>
@@ -147,6 +105,17 @@ th,td{
 						<td align="center">${board.rbdate}</td>
 					</tr>
 				</c:forEach>
+				<tr>	<!-- 제목을 클릭하면 이 tr부분이 비동기로 추가되기 -->
+					<td id = "reviewboard_body"></td> 
+					<td id = "reviewboard_body_rbcont" colspan="4" align="left">
+					제목을 클릭했을 때 내용이 여기에 들어가면 좋겠다 이런식으루 <br>
+					별 헤는 밤<br>
+					계절이 지나가는 하늘에는 가을로 가득 차 있습니다. 나는 아무 걱정도 없이
+					가을 속의 별들을 다 헬 듯합니다. 가슴 속에 하나 둘 새겨지는 별을 다 못 헤는 것은 
+					쉬이 아침이 오는 까닭이요, 내일 밤이 남은 까닭이요, 아직 나의 청춘이 다하지 않은 
+					까닭입니다. 
+					</td>
+				</tr>
 
 				<tr id="review_write_btn">
 					<td colspan="5" align="center">${pager}</td>
