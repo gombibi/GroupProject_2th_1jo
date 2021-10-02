@@ -52,6 +52,8 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap');
 </style>
+
+
 </head>
 
 <body>
@@ -106,14 +108,17 @@
 					</tr>
 				</c:forEach>
 				<tr>	<!-- 제목을 클릭하면 이 tr부분이 비동기로 추가되기 -->
-					<td id = "reviewboard_body"></td> 
+					<td id = "reviewboard_body_update"><a href=#>리뷰 수정</a></td> 
 					<td id = "reviewboard_body_rbcont" colspan="4" align="left">
 					제목을 클릭했을 때 내용이 여기에 들어가면 좋겠다 이런식으루 <br>
 					별 헤는 밤<br>
 					계절이 지나가는 하늘에는 가을로 가득 차 있습니다. 나는 아무 걱정도 없이
 					가을 속의 별들을 다 헬 듯합니다. 가슴 속에 하나 둘 새겨지는 별을 다 못 헤는 것은 
 					쉬이 아침이 오는 까닭이요, 내일 밤이 남은 까닭이요, 아직 나의 청춘이 다하지 않은 
-					까닭입니다. 
+					까닭입니다. <br>
+					어쩌구저쩌구... 배고프다 <br>
+					근데 리뷰 내용에 br 태그 먹이는건 어떻게 하지... DB에 자동으로 들어가게 해야 하나
+					이것도 연구해야겟당
 					</td>
 				</tr>
 

@@ -65,7 +65,10 @@ th,td{
 }
 
 #reviewboard_body_rbcont{
-	padding: 10px 30px 5px 20px;
-	
+	padding: 10px 30px 5px 20px;	
 }
 
+#reviewboard_body_update{
+	vertical-align:top;
+	padding-top: 10px;
+}
