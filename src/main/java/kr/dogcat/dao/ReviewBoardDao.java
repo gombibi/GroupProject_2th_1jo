@@ -103,13 +103,15 @@ public class ReviewBoardDao {
 		int row = 0;
 		try {
 			conn = ConnectionHelper.getConnection("oracle");
-			String sql = "insert into Rboard(rbnum, email, rbdate, rbsubj, rbcont, point, ref)"
-					+ " values(Rboard_rbnum.nextval,?,sysdate,?,?,0,?)";
+			String sql = "insert into Rboard(rbnum, email, rbdate, rbsubj, rbcont, point, ref, depth, step)"
+					+ " values(Rboard_rbnum.nextval,?,sysdate,?,?,?,?, 0, 0)";
+			
 			pstmt = conn.prepareStatement(sql);
 
 			pstmt.setString(1, boarddata.getEmail());
 			pstmt.setString(2, boarddata.getRbsubj());
 			pstmt.setString(3, boarddata.getRbcont());
+			pstmt.setInt(4, boarddata.getPoint());
 
 			// 계층형 게시판
 			// refer(참조값) , step , depth
@@ -118,7 +120,10 @@ public class ReviewBoardDao {
 
 			int refermax = getMaxRefer();
 			int refer = refermax + 1;
-			pstmt.setInt(4, refer);
+			pstmt.setInt(5, refer);
+
+			System.out.println(boarddata.getEmail() + " / " +  boarddata.getRbsubj() + " / " +  boarddata.getRbcont() + " / " +  boarddata.getPoint() );
+			System.out.println(refer);
 
 			row = pstmt.executeUpdate();
 
