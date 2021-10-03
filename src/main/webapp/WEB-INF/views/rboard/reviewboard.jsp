@@ -159,7 +159,7 @@
 					<td colspan="4"></td>
 					<td colspan="1" align="center">
 						<button type="submit" class="about-view packages-btn"
-							onclick="location.href = 'ReviewBoardWrite.bd';">글쓰기</button>
+							onclick="location.href = 'ReviewBoardWrite.bd';"> 글쓰기 </button>
 					</td>
 				</tr>
 			</table>
