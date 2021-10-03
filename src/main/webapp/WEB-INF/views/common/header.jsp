@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <!-- main-menu Start -->
 		<header class="top-area">
@@ -25,10 +26,21 @@
 								<div class="collapse navbar-collapse">		  
 									<ul class="nav navbar-nav navbar-right">
 										<li class="smooth-menu"><a href="#">시터리스트</a></li>
-										<li class="smooth-menu"><a href="photogallery.jsp">포토갤러리</a></li>
+										<li class="smooth-menu"><a href="PboardList.pg">포토갤러리</a></li>
 										<li class="smooth-menu"><a href="#">리뷰</a></li>
+										
+										<c:set var="usernic" value="${loginUser.mnic}"/> <!-- sessionScope 생략 -->
+											<c:choose>
+												<c:when test="${usernic!=null}">
+													<b>${usernic}</b> 로그인 상태
+												</c:when>
+												<c:otherwise>
+													<b>로그인 하지 않으셨네요</b>
+												</c:otherwise>
+											</c:choose>
+											
 										<li>
-											<form action="login.jsp" method=""><button class="book-btn">Login </button></form>
+											<form action="Login_temp.jsp" method=""><button class="book-btn">Login </button></form>
 										</li><!--/.project-btn--> 
 										<li>
 											<form action="joinform.jsp" method=""><button class="book-btn">sing up </button></form>

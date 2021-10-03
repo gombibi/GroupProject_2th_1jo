@@ -25,12 +25,18 @@ public class PboardReplyDeleteService implements Action {
 		response.setContentType("text/html; charset=UTF-8");
 		
 		//데이터 받기
+		String replyemail = request.getParameter("replyemail");//댓글의 id(이메일)
 		String memonum = request.getParameter("memonum");//댓글의 순번(PK)
 		String pbnum_fk=request.getParameter("pbnum");//댓글의 원본 게시글 번호
     	
     	ActionForward forward = null;
     	
+		String msg = "";
+		String url = "";
+    	
     	try {
+			if(!(replyemail==useremail)) {
+
 			PrintWriter out = response.getWriter();
 			
 			if(pbnum_fk == null || memonum == null || memonum.trim().equals("")){
@@ -44,9 +50,6 @@ public class PboardReplyDeleteService implements Action {
 			int result = dao.replyDelete(memonum);
 
 			// 처리하는 코드
-			String msg = "";
-			String url = "";
-
 			if (result > 0) {
 				msg = "댓글 삭제 성공";
 				url = "PboardContent.pg?pbnum=" + pbnum_fk;
@@ -61,7 +64,17 @@ public class PboardReplyDeleteService implements Action {
 			forward = new ActionForward();
 			forward.setRedirect(false);
 			forward.setPath("/WEB-INF/views/redirect.jsp");
+			}else {
+				msg = "작성자만 삭제가 가능합니다";
+				url = "PboardContent.pg?pbnum=\" + pbnum_fk";
+				
+				request.setAttribute("board_msg",msg);
+			    request.setAttribute("board_url", url);
 			
+			    forward = new ActionForward();
+			    forward.setRedirect(false);
+			    forward.setPath("/WEB-INF/views/redirect.jsp");
+			}
 			
 		} catch (IOException e) {
 			e.printStackTrace();

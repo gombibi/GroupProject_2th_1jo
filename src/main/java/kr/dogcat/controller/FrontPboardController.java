@@ -50,7 +50,7 @@ public class FrontPboardController extends HttpServlet {
     	}else if(url_Command.equals("/PboardWrite.pg")) { //포토갤러리 글쓰기
     		forward = new ActionForward();
     		forward.setRedirect(false);
-    		forward.setPath("WEB-INF/views/board/PboardWrite.jsp");
+    		forward.setPath("/WEB-INF/views/pboard/PboardWrite.jsp");
     		System.out.println("PboardWrite.pg 실행");
     		
     	}else if(url_Command.equals("/PboardWriteOk.pg")) { //포토갤러리 글쓰기

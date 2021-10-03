@@ -72,7 +72,7 @@ public class PboardListService implements Action {
 			
 			forward = new ActionForward();
 			forward.setRedirect(false);
-			forward.setPath("/WEB-INF/board/board_list.jsp");
+			forward.setPath("/WEB-INF/views/pboard/PboardList.jsp");
 			
 		} catch (Exception e) {
 			e.printStackTrace();

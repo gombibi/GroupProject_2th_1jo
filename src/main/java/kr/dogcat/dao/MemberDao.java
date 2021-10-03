@@ -129,9 +129,10 @@ public class MemberDao {
 		
 		try {
 				conn= ConnectionHelper.getConnection("oracle");//추가
-				String sql = "select mnic,mname,mpwd,madd,mphone from Member where email=?";
+				String sql = "select email,mnic,mname,mpwd,madd,mphone from Member where email=?";
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setString(1, email);
+				
 				
 				rs = pstmt.executeQuery();
 				

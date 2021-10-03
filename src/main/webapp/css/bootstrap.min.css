@@ -182,8 +182,9 @@ table {
 td,
 th {
   padding: 0;
-  display: block;
-} /*! Source: https://github.com/h5bp/html5-boilerplate/blob/master/src/css/main.css */
+/*  display: block;
+ /*! Source: https://github.com/h5bp/html5-boilerplate/blob/master/src/css/main.css */
+}
 @media print {
   *,
   :after,

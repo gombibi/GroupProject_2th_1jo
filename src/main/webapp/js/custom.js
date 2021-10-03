@@ -166,6 +166,7 @@ $(document).ready(function(){
         
         //=============
 
+/*
         $('li.smooth-menu a').bind("click", function(event) {
             event.preventDefault();
             var anchor = $(this);
@@ -177,7 +178,7 @@ $(document).ready(function(){
         $('body').scrollspy({
             target:'.navbar-collapse',
             offset:0
-        });
+        }); */
 
     // 7.animation support
 

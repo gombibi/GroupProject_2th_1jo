@@ -29,15 +29,17 @@ public class MemberLoginService implements Action {
 				// Top.jsp 정보 로그인 상태 반영하기
 				Member m = dao.getMemberInfoByEmail(email);
 				
+				System.out.println(m.getMnic());
+				
 				HttpSession session = request.getSession();
 				session.setAttribute("loginUser", m);
 				
 				// 이동처리
-				url = "Main.jsp";
+				url = "Index.jsp";
 
 				forward = new ActionForward();
 				forward.setRedirect(false); // forward
-				forward.setPath("Main.jsp"); //front 주소 확인
+				forward.setPath("Index.jsp"); //front 주소 확인
 
 			} else {
 				msg = "로그인 실패";

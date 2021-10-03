@@ -38,9 +38,7 @@ public class PboardWriteService implements Action {
     	
     	ActionForward forward = null;
     	
-		try {		
-			//로그인한 회원만 작성 가능
-			if(!(useremail==null)) {
+		try {
 				
 			//첨부파일 <file> multi추가
 			MultipartRequest multi = new MultipartRequest(
@@ -90,18 +88,6 @@ public class PboardWriteService implements Action {
 	        forward = new ActionForward();
 	        forward.setRedirect(false);
 	        forward.setPath("/WEB-INF/views/redirect.jsp");
-	        
-		}else {
-			msg = "로그인 후 이용 가능합니다";
-			url = "Login.jsp";
-			
-			request.setAttribute("board_msg",msg);
-		    request.setAttribute("board_url", url);
-		
-		    forward = new ActionForward();
-		    forward.setRedirect(false);
-		    forward.setPath("/WEB-INF/views/redirect.jsp");
-		}    
 	        
 		} catch (Exception e) {
 			e.printStackTrace();
