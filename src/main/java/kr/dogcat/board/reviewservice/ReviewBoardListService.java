@@ -23,7 +23,7 @@ public class ReviewBoardListService implements Action {
 
 			// 게시물 총 건수
 			int totalboardcount = rbd.totalBoardCount();
-			
+
 			// 상세보기 >> 다시 LIST 넘어올때 >> 현재 페이지 설정
 			String ps = request.getParameter("ps"); // pagesize 조회 개수
 			String cp = request.getParameter("cp"); // current page 현재페이지
@@ -56,7 +56,7 @@ public class ReviewBoardListService implements Action {
 			
 			// 전체 목록 가져오기
 			List<ReviewBoard> list = rbd.list(cpage, pagesize); // list >> 1 , 20
-    		
+			
 			int pagersize = 10; // 페이저블락의 개수 [1][2][3]....[9][10]
 			ThePager pager = new ThePager(totalboardcount,cpage,pagesize,pagersize,"ReviewBoardList.bd");
 			// 페이징 라인 주소 받아서 보내줌

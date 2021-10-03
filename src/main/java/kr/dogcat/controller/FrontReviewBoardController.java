@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import kr.dogcat.action.Action;
 import kr.dogcat.action.ActionForward;
@@ -44,6 +45,8 @@ public class FrontReviewBoardController extends HttpServlet {
     		
     	}else if(url_Command.equals("/ReviewBoardWrite.bd")) { // 리뷰 남기기 (view)
     		forward = new ActionForward();
+    		
+    		HttpSession session = request.getSession();
     		
     		if(request.getSession()==null) {
     			

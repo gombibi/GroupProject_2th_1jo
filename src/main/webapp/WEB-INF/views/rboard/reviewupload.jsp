@@ -112,7 +112,6 @@ input {
 	<c:set var="list" value="${requestScope.list}"></c:set>
 	<c:set var="totalboardcount" value="${requestScope.totalboardcount}"></c:set>
 	<c:set var="pager" value="${requestScope.pager}"></c:set>
-	
 	<jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
 
 	<div id="riveiwBoardListContainer">
@@ -124,7 +123,7 @@ input {
 				<table id="reviewboard">	<!-- 리뷰작성테이블 -->
 					<tr id="reviewboard_write">	<!-- 닉네임 -->
 						<td id="rboard_td">닉네임</td>
-						<td id="rboard_input_text" colspan="5">${sessionScope.loginUser.mnic}<input type="hidden" name="mnic" id="mic" value="${sessionScope.loginUser.mnic}"></input></td>
+						<td id="rboard_input_text" colspan="5"><input type="text" name="email" id="email"></input></td>
 					</tr>
 					<tr id="reviewboard_write"> <!-- 제목 -->
 						<td id="rboard_td">제　목</td>

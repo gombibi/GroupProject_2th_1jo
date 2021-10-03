@@ -20,14 +20,14 @@ public class ReviewBoardEditGoService implements Action {
 		String rbnum = request.getParameter("rbnum");
 		String cpage = request.getParameter("cp"); // 현재 페이지
 		String pagesize = request.getParameter("ps"); // 한 페이지당 조회 건수
-		String mnic = request.getParameter("mnic");
+		String email = request.getParameter("email");
 
 		String msg="";
 	    String url="";
 	    
 		HttpSession session = request.getSession();
-		Member m = (Member)session.getAttribute("loginUser");
-		String usernick = m.getMnic();
+		Member m = (Member)session.getAttribute("loginuser");
+		String useremail = m.getEmail();
 
 		ReviewBoardDao rbd = new ReviewBoardDao();
 		ActionForward forward = null;
@@ -53,7 +53,7 @@ public class ReviewBoardEditGoService implements Action {
 			forward.setRedirect(false);
 			forward.setPath("/WEB-INF/views/redirect.jsp");
 			
-		}else if(!usernick.equals(mnic)){
+		}else if(!useremail.equals(email)){
 			
 			msg="해당 글의 작성자가 아닙니다 !";
 		    url="ReviewBoardContent.bd?cp="+cpage+"&ps="+pagesize+"&rbnum="+rbnum;

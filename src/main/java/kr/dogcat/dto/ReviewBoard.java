@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class ReviewBoard {
 	private int rbnum; // 글번호
-	private String mnic; // 닉네임
+	private String email; // 이메일(PK)
 	private Date rbdate; // 작성일
 	private String rbsubj; // 글제목
 	private String rbcont; // 글 내용
@@ -15,11 +15,11 @@ public class ReviewBoard {
 	
 	public ReviewBoard() {}
 
-	public ReviewBoard(int rbnum, String mnic, Date rbdate, String rbsubj, String rbcont, int point, int ref,
+	public ReviewBoard(int rbnum, String email, Date rbdate, String rbsubj, String rbcont, int point, int ref,
 			int depth, int step) {
 		super();
 		this.rbnum = rbnum;
-		this.mnic = mnic;
+		this.email = email;
 		this.rbdate = rbdate;
 		this.rbsubj = rbsubj;
 		this.rbcont = rbcont;
@@ -37,12 +37,12 @@ public class ReviewBoard {
 		this.rbnum = rbnum;
 	}
 
-	public String getMnic() {
-		return mnic;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setMnic(String mnic) {
-		this.mnic = mnic;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public Date getRbdate() {
@@ -103,7 +103,7 @@ public class ReviewBoard {
 
 	@Override
 	public String toString() {
-		return "ReviewBoard [rbnum=" + rbnum + ", mnic=" + mnic + ", rbdate=" + rbdate + ", rbsubj=" + rbsubj
+		return "ReviewBoard [rbnum=" + rbnum + ", email=" + email + ", rbdate=" + rbdate + ", rbsubj=" + rbsubj
 				+ ", rbcont=" + rbcont + ", point=" + point + ", ref=" + ref + ", depth=" + depth + ", step=" + step
 				+ "]";
 	}
