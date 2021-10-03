@@ -17,6 +17,7 @@ public class ReviewBoardWriteService implements Action {
 		String email = request.getParameter("email");
 		String rbsubj = request.getParameter("rbsubj");
 		String rbcont = request.getParameter("rbcont");
+		int point = Integer.parseInt(request.getParameter("point"));
 		String msg = "";
 		String url = "";
 
@@ -27,6 +28,7 @@ public class ReviewBoardWriteService implements Action {
 		board.setEmail(email);
 		board.setRbsubj(rbsubj);
 		board.setRbcont(rbcont);
+		board.setPoint(point);
 
 		try {
 
