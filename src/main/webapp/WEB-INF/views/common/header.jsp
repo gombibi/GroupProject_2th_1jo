@@ -26,7 +26,7 @@
 									<ul class="nav navbar-nav navbar-right">
 										<li class="smooth-menu"><a href="#">시터리스트</a></li>
 										<li class="smooth-menu"><a href="photogallery.jsp">포토갤러리</a></li>
-										<li class="smooth-menu"><a href="#">리뷰</a></li>
+										<li class="smooth-menu"><a href="/ReviewBoardList.bd">리뷰게시판</a></li>
 										<li>
 											<form action="login.jsp" method=""><button class="book-btn">Login </button></form>
 										</li><!--/.project-btn--> 

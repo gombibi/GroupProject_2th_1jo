@@ -26,7 +26,7 @@ public class ReviewBoardRewriteOkService implements Action {
 			
 			board.setRbnum(rbnum);
 			board.setRbsubj(rbsubj);
-			board.setEmail(rbcont);
+			board.setRbcont(rbcont);
 
 			ReviewBoardDao rbd = new ReviewBoardDao();
 			
