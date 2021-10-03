@@ -21,6 +21,7 @@ public class ReviewBoardDao {
 		ResultSet rs = null;
 		int totalcount = 0;
 		try {
+			
 			conn = ConnectionHelper.getConnection("oracle");
 			String sql = "select count(*) cnt from Rboard";
 			pstmt = conn.prepareStatement(sql);
@@ -28,6 +29,7 @@ public class ReviewBoardDao {
 			if (rs.next()) {
 				totalcount = rs.getInt("cnt");
 			}
+			
 		} catch (Exception e) {
 
 		} finally {
@@ -51,9 +53,13 @@ public class ReviewBoardDao {
 		List<ReviewBoard> list = null;
 		try {
 			conn = ConnectionHelper.getConnection("oracle");
-			String sql = "select * from " + "(select rownum rn,rbnum,email,rbdate,rbsubj,rbcont,point,ref,depth,step"
-					+ " from ( SELECT * FROM Rboard ORDER BY ref DESC , step ASC ) where rownum <= ?"
-					+ ") where rn >= ?";
+			
+			String sql = "select * from "
+			  		   + "(select rownum rn, t.rbnum, m.mnic, t.rbdate,t.rbsubj,t.rbcont,t.point,t.ref,t.depth,t.step "
+					   + "from ( SELECT * FROM Rboard ORDER BY ref DESC , step ASC ) t "
+					   + "join Member m on t.email = m.email "
+					   + "where rownum <= ?) where rn >= ?";
+			
 			pstmt = conn.prepareStatement(sql);
 			// 공식같은 로직
 			int start = cpage * pagesize - (pagesize - 1); // 현재 페이지의 첫번째 번호 (cpage-1)*pagesize+1
@@ -67,7 +73,7 @@ public class ReviewBoardDao {
 			while (rs.next()) {
 				ReviewBoard board = new ReviewBoard();
 				board.setRbnum(rs.getInt("rbnum"));
-				board.setEmail(rs.getString("email"));
+				board.setMnic(rs.getString("mnic"));
 				board.setRbdate(rs.getDate("rbdate"));
 				board.setRbsubj(rs.getString("rbsubj"));
 				board.setRbcont(rs.getString("rbcont"));
@@ -103,12 +109,12 @@ public class ReviewBoardDao {
 		int row = 0;
 		try {
 			conn = ConnectionHelper.getConnection("oracle");
-			String sql = "insert into Rboard(rbnum, email, rbdate, rbsubj, rbcont, point, ref, depth, step)"
+			String sql = "insert into Rboard(rbnum, mnic, rbdate, rbsubj, rbcont, point, ref, depth, step)"
 					+ " values(Rboard_rbnum.nextval,?,sysdate,?,?,?,?, 0, 0)";
 			
 			pstmt = conn.prepareStatement(sql);
 
-			pstmt.setString(1, boarddata.getEmail());
+			pstmt.setString(1, boarddata.getMnic());
 			pstmt.setString(2, boarddata.getRbsubj());
 			pstmt.setString(3, boarddata.getRbcont());
 			pstmt.setInt(4, boarddata.getPoint());
@@ -121,9 +127,6 @@ public class ReviewBoardDao {
 			int refermax = getMaxRefer();
 			int refer = refermax + 1;
 			pstmt.setInt(5, refer);
-
-			System.out.println(boarddata.getEmail() + " / " +  boarddata.getRbsubj() + " / " +  boarddata.getRbcont() + " / " +  boarddata.getPoint() );
-			System.out.println(refer);
 
 			row = pstmt.executeUpdate();
 
@@ -171,33 +174,22 @@ public class ReviewBoardDao {
 
 	}
 
-	// 게시물 상세보기
-	public ReviewBoard getContent(int rbnum) {
+	// 게시물 상세보기 - 비동기
+	public String getContent(int rbnum) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		ReviewBoard board = null;
+		String boardcont = null;
 
 		try {
 			conn = ConnectionHelper.getConnection("oracle");
-			String sql = "select rbnum, email, rbdate, rbsubj, rbcont, point, ref, depth, step from Rboard where rbnum=?";
+			String sql = "select rbcont from Rboard where rbnum=?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, rbnum);
 
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
-				String email = rs.getString("email");
-				Date rbdate = rs.getDate("rbdate");
-				String rbsubj = rs.getString("rbsubj");
-				String rbcont = rs.getString("rbcont");
-				int point = rs.getInt("point");
-
-				// 계층형
-				int ref = rs.getInt("ref");
-				int step = rs.getInt("step");
-				int depth = rs.getInt("depth");
-
-				board = new ReviewBoard(rbnum, email, rbdate, rbsubj, rbcont, point, ref, depth, step);
+				boardcont = rs.getString("rbcont");
 			}
 
 		} catch (Exception e) {
@@ -212,11 +204,11 @@ public class ReviewBoardDao {
 			}
 		}
 
-		return board;
+		return boardcont;
 	}
 
 	// 게시글 수정하기 화면
-	public ReviewBoard getEditContent(String rbnum) {
+	public String getEditContent(String rbnum) {
 		return this.getContent(Integer.parseInt(rbnum));
 		// 조회화면 동일 (기존에 있는 함수 재활용)
 	}
@@ -377,8 +369,8 @@ public class ReviewBoardDao {
 			String refer_depth_step_sal = "select ref , depth from Rboard where rbnum=?";
 
 			// 답글 insert
-			String sql = "insert into Rboard(rbnum, email, rbdate, rbsubj, rbcont, point, ref, depth, step)"
-					+ " values(Rboard_rbnum.nextval,admin@dogcat.com,sysdate,?,?,0,?,?,?)";
+			String sql = "insert into Rboard(rbnum, mnic, rbdate, rbsubj, rbcont, point, ref, depth, step)"
+					+ " values(Rboard_rbnum.nextval,'관리자',sysdate,?,?,0,?,?,?)";
 
 			pstmt = conn.prepareStatement(refer_depth_step_sal);
 			pstmt.setInt(1, rbnum);

@@ -14,7 +14,7 @@ public class ReviewBoardWriteService implements Action {
 	public ActionForward execute(HttpServletRequest request, HttpServletResponse response) {
 
 
-		String email = request.getParameter("email");
+		String mnic = request.getParameter("mnic");
 		String rbsubj = request.getParameter("rbsubj");
 		String rbcont = request.getParameter("rbcont");
 		int point = Integer.parseInt(request.getParameter("point"));
@@ -25,7 +25,7 @@ public class ReviewBoardWriteService implements Action {
 
 		ReviewBoard board = new ReviewBoard();
 
-		board.setEmail(email);
+		board.setMnic(mnic);
 		board.setRbsubj(rbsubj);
 		board.setRbcont(rbcont);
 		board.setPoint(point);
