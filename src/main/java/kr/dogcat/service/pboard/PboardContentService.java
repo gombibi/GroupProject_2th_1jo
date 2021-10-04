@@ -18,25 +18,22 @@ public class PboardContentService implements Action {
 	@Override
 	public ActionForward execute(HttpServletRequest request, HttpServletResponse response) {
 		
-		//로그인한 멤버 객체 불러오기
 		HttpSession session = request.getSession();
-		Member m = (Member)session.getAttribute("loginUser");
-		String useremail = m.getEmail();
 		
 		//글번호 받기
-		String phnum= request.getParameter("phnum"); 
+		String pbnum= request.getParameter("pbnum"); 
 		
 		ActionForward forward = null;
 		
 		try {
 			
 			//글 번호를 가지고 오지 않았을 경우 예외처리
-			if(phnum == null || phnum.trim().equals("")){
+			if(pbnum == null || pbnum.trim().equals("")){
 				response.sendRedirect("PboardList.pg");
 			}
 			
-			phnum = phnum.trim();
-			//board_content.jsp?phnum=19&cp=1&ps=9  //다시 목록으로 돌아가도 현재 page 유지
+			pbnum = pbnum.trim();
+			//board_content.jsp?pbnum=19&cp=1&ps=9  //다시 목록으로 돌아가도 현재 page 유지
 			String cpage = request.getParameter("cp"); //current page
 			String pagesize = request.getParameter("ps"); //pagesize
 			
@@ -54,21 +51,23 @@ public class PboardContentService implements Action {
 			PboardDao dao = new PboardDao();
 			
 			//데이터 조회 (1건 (row))
-			Pboard pboard = dao.getContent(Integer.parseInt(phnum));
+			Pboard pboard = dao.getContent(Integer.parseInt(pbnum));
 			System.out.println(pboard);
+			System.out.println("닉네임22 : " + pboard.getMnic());
+			System.out.println("제목 : " + pboard.getPbsubj());
 			
 			request.setAttribute("cpage", cpage);
 			request.setAttribute("pagesize", pagesize);
-			request.setAttribute("phnum", phnum);
+			request.setAttribute("pbnum", pbnum);
 			request.setAttribute("pboard", pboard);
 			
-			List<Memo> replylist = dao.replylist(phnum);
-			
+			List<Memo> replylist = dao.replylist(pbnum);
+			System.out.println(replylist);			
 			request.setAttribute("replylist", replylist);
 			
 			forward = new ActionForward();
 			forward.setRedirect(false);
-			forward.setPath("/WEB-INF/board/board_content.jsp");
+			forward.setPath("/WEB-INF/views/pboard/PboardContent.jsp");
 			
 		} catch (Exception e) {
 			e.printStackTrace();

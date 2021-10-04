@@ -21,25 +21,27 @@ public class PboardEditService implements Action {
 	@Override
 	public ActionForward execute(HttpServletRequest request, HttpServletResponse response) {
 		
+		response.setContentType("text/html; charset=UTF-8");
+
 		//로그인한 멤버 객체 불러오기
 		HttpSession session = request.getSession();
 		Member m = (Member)session.getAttribute("loginUser");
 		String useremail = m.getEmail();
 		
 		//글번호 받기
-		String phnum= request.getParameter("phnum"); 
+		String pbnum= request.getParameter("pbnum"); 
 		
 		ActionForward forward = null;
 		
 		try {
 			//글 번호를 가지고 오지 않았을 경우 예외처리
-			if(phnum == null || phnum.trim().equals("")){
+			if(pbnum == null || pbnum.trim().equals("")){
 				System.out.println("글번호 입력 오류");
 				response.sendRedirect("PboardList.pg");
 			}
 			
 			PboardDao dao = new PboardDao();
-	    	Pboard pboard = dao.getEditContent(phnum);
+	    	Pboard pboard = dao.getEditContent(pbnum);
 
 			PrintWriter out = response.getWriter();
 			
@@ -48,12 +50,12 @@ public class PboardEditService implements Action {
 				out.print("<hr><a href='PboardList.pg'>목록가기</a>");
 	        }
 	        
-	        request.setAttribute("phnum", phnum);
+	        request.setAttribute("pbnum", pbnum);
 	        request.setAttribute("pboard", pboard);
 	        
 	        forward = new ActionForward();
 	        forward.setRedirect(false);
-	        forward.setPath("/WEB-INF/board/board_edit.jsp");
+	        forward.setPath("/WEB-INF/views/pboard/PboardEdit.jsp");
 			
 		} catch (Exception e) {
 			e.printStackTrace();

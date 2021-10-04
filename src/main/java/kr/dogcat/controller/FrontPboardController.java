@@ -12,7 +12,6 @@ import kr.dogcat.action.Action;
 import kr.dogcat.action.ActionForward;
 import kr.dogcat.service.pboard.BestPhotoService;
 import kr.dogcat.service.pboard.PboardContentService;
-import kr.dogcat.service.pboard.PboardDeleteOkService;
 import kr.dogcat.service.pboard.PboardDeleteService;
 import kr.dogcat.service.pboard.PboardEditOkService;
 import kr.dogcat.service.pboard.PboardEditService;
@@ -71,12 +70,17 @@ public class FrontPboardController extends HttpServlet {
     	}else if(url_Command.equals("/PboardEditOk.pg")) { //포토갤러리 글 수정
     		action = new PboardEditOkService();
     		forward = action.execute(request, response);
-    		System.out.println("BoardEditService 실행");
+    		System.out.println("BoardEditOkService 실행");
     		
     	}else if(url_Command.equals("/PboardDelete.pg")) { //포토갤러리 글 삭제
     		action = new PboardDeleteService();
     		forward = action.execute(request, response);
     		System.out.println("PboardDeleteService 실행");
+    		
+    	}else if(url_Command.equals("/PboardDeleteOk.pg")) { //포토갤러리 글 삭제
+    		action = new PboardDeleteService();
+    		forward = action.execute(request, response);
+    		System.out.println("PboardDeleteOkService 실행");
     		
     	}else if(url_Command.equals("/PboardReply.pg")) { //리뷰 작성
     		action = new PboardReplyService();

@@ -7,20 +7,22 @@ public class Memo {
 	private String email;
 	private Date mmdate;
 	private String mmcont;
-	
+	private String mnic;
+
 	//원글번호 참조
 	private int pbnum_fk;
 
 	public Memo() {
 	}
 
-	public Memo(int memonum, String email, Date mmdate, String mmcont, int pbnum_fk) {
+	public Memo(int memonum, String email, Date mmdate, String mmcont, int pbnum_fk, String mnic) {
 		super();
 		this.memonum = memonum;
 		this.email = email;
 		this.mmdate = mmdate;
 		this.mmcont = mmcont;
 		this.pbnum_fk = pbnum_fk;
+		this.mnic = mnic;
 	}
 
 	public int getMemonum() {
@@ -61,6 +63,14 @@ public class Memo {
 
 	public void setPbnum_fk(int pbnum_fk) {
 		this.pbnum_fk = pbnum_fk;
+	}
+	
+	public String getMnic() {
+		return mnic;
+	}
+
+	public void setMnic(String mnic) {
+		this.mnic = mnic;
 	}
 	
 }

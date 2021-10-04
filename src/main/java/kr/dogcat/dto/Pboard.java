@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class Pboard {
 	//not null (필수 입력)
-	private int phnum;
+	private int pbnum;
 	private String email;
 	private Date pbdate; //default SYSDATE
 	private String pbsubj;
@@ -14,13 +14,16 @@ public class Pboard {
 	private int pfilesize;    //default 0
 	private int heart;
 	
+	private String mnic;
+
+
 	public Pboard() {
 	}
 
-	public Pboard(int phnum, String email, Date pbdate, String pbsubj, String pbcont, String pfilename,
-			int pfilesize, int heart) {
+	public Pboard(int pbnum, String email, Date pbdate, String pbsubj, String pbcont, String pfilename,
+			int pfilesize, int heart, String mnic) {
 		super();
-		this.phnum = phnum;
+		this.pbnum = pbnum;
 		this.email = email;
 		this.pbdate = pbdate;
 		this.pbsubj = pbsubj;
@@ -28,14 +31,15 @@ public class Pboard {
 		this.pfilename = pfilename;
 		this.pfilesize = pfilesize;
 		this.heart = heart;
+		this.mnic = mnic;
 	}
 
-	public int getPhnum() {
-		return phnum;
+	public int getPbnum() {
+		return pbnum;
 	}
 
-	public void setPhnum(int phnum) {
-		this.phnum = phnum;
+	public void setPbnum(int pbnum) {
+		this.pbnum = pbnum;
 	}
 
 	public String getEmail() {
@@ -92,6 +96,14 @@ public class Pboard {
 
 	public void setHeart(int heart) {
 		this.heart = heart;
+	}
+	
+	public String getMnic() {
+		return mnic;
+	}
+
+	public void setMnic(String mnic) {
+		this.mnic = mnic;
 	}
 	
 }

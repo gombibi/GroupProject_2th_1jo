@@ -28,6 +28,8 @@ public class PboardReplyDeleteService implements Action {
 		String replyemail = request.getParameter("replyemail");//댓글의 id(이메일)
 		String memonum = request.getParameter("memonum");//댓글의 순번(PK)
 		String pbnum_fk=request.getParameter("pbnum");//댓글의 원본 게시글 번호
+		System.out.println(memonum);
+		System.out.println(pbnum_fk);
     	
     	ActionForward forward = null;
     	
@@ -64,6 +66,7 @@ public class PboardReplyDeleteService implements Action {
 			forward = new ActionForward();
 			forward.setRedirect(false);
 			forward.setPath("/WEB-INF/views/redirect.jsp");
+			
 			}else {
 				msg = "작성자만 삭제가 가능합니다";
 				url = "PboardContent.pg?pbnum=\" + pbnum_fk";

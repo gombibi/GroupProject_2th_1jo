@@ -83,11 +83,11 @@ public class PboardDao {
         
         try {
 			conn = ConnectionHelper.getConnection("oracle");// 추가
-			String sql="select * from " +
-	                    "(select rownum rn, phnum, email, pbdate, pbsubj, pbcont, pfilename, pfilesize, heart" +
-	                    " from ( SELECT * FROM Pboard ORDER BY pbdate DESC) "+
-	                    " where rownum <= ?" +  //endrow
-					    ") where rn >= ?"; //startrow
+			String sql="select * from "
+					+ "(select rownum rn, pbnum, email, pbdate, pbsubj, pbcont, pfilename, pfilesize, heart, mnic "
+					+ "from ( SELECT A.*, B.mnic FROM Pboard A join MEMBER B ON A.email = B.email ORDER BY A.pbdate DESC) "
+					+ "where rownum <= ?"
+					+ ")where rn >= ?"; //startrow
             pstmt=conn.prepareStatement(sql);
             
 			int start = cpage * pagesize - (pagesize -1); //1 * 9 - (9 - 1) >> 1
@@ -102,7 +102,7 @@ public class PboardDao {
             
             while(rs.next()) {
             	Pboard p =new Pboard();
-                p.setPhnum(rs.getInt("phnum"));
+                p.setPbnum(rs.getInt("pbnum"));
                 p.setEmail(rs.getString("email"));
 				p.setPbdate(rs.getDate("pbdate"));
                 p.setPbsubj(rs.getString("pbsubj"));
@@ -110,6 +110,7 @@ public class PboardDao {
                 p.setPfilename(rs.getString("pfilename"));
                 p.setPfilesize(rs.getInt("pfilesize"));
                 p.setHeart(rs.getInt("heart"));
+                p.setMnic(rs.getString("mnic"));
 
                 lists.add(p);
             }
@@ -133,11 +134,11 @@ public class PboardDao {
         
         try {
 			conn = ConnectionHelper.getConnection("oracle");// 추가
-			String sql="select * from " +
-	                    "(select rownum rn, phnum, email, pbdate, pbsubj, pbcont, pfilename, pfilesize, heart" +
-	                    " from ( SELECT * FROM Pboard ORDER BY heart DESC) "+
-	                    " where rownum <= ?" +  //endrow
-					    ") where rn >= ?"; //startrow
+			String sql="select * from "
+					+ "(select rownum rn, pbnum, email, pbdate, pbsubj, pbcont, pfilename, pfilesize, heart, mnic "
+					+ "from ( SELECT A.*, B.mnic FROM Pboard A join MEMBER B ON A.email = B.email ORDER BY A.heart DESC) "
+					+ "where rownum <= ?"
+					+ ")where rn >= ?"; //startrow
             pstmt=conn.prepareStatement(sql);
             
 			int start = 1;
@@ -152,7 +153,7 @@ public class PboardDao {
             
             while(rs.next()) {
             	Pboard p =new Pboard();
-                p.setPhnum(rs.getInt("phnum"));
+                p.setPbnum(rs.getInt("pbnum"));
                 p.setEmail(rs.getString("email"));
 				p.setPbdate(rs.getDate("pbdate"));
                 p.setPbsubj(rs.getString("pbsubj"));
@@ -160,6 +161,7 @@ public class PboardDao {
                 p.setPfilename(rs.getString("pfilename"));
                 p.setPfilesize(rs.getInt("pfilesize"));
                 p.setHeart(rs.getInt("heart"));
+                p.setMnic(rs.getString("mnic"));
 
                 bestList.add(p);
             }
@@ -174,18 +176,19 @@ public class PboardDao {
     }
     
 	//게시물 상세보기
-	public Pboard getContent(int phnum) {
+	public Pboard getContent(int pbnum) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		Pboard pboard= null;
-		
+		System.out.println(11111);
 		try {
 			conn = ConnectionHelper.getConnection("oracle");// 추가
-			String sql="select phnum,email,pbdate,pbsubj,pbcont,pfilename,pfilesize,heart from Pboard where phnum=?";
+			String sql="select B.pbnum,B.email,B.pbdate,B.pbsubj,B.pbcont,B.pfilename,B.pfilesize,B.heart,A.mnic FROM MEMBER A JOIN Pboard B ON A.email = B.email where pbnum=?";
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, phnum);
-			
+			pstmt.setInt(1, pbnum);
+			System.out.println(222);
+
 			rs = pstmt.executeQuery();
 			if(rs.next()) {
 				String email = rs.getString("email");
@@ -195,10 +198,13 @@ public class PboardDao {
 				String pfilename = rs.getString("pfilename");
 				int pfilesize = rs.getInt("pfilesize");
 				int heart = rs.getInt("heart");
-				
-				pboard = new Pboard(phnum, email, pbdate, pbsubj, pbcont, pfilename, pfilesize, heart);
+				String mnic = rs.getString("mnic");
+
+				System.out.println("dao nic : " + mnic);
+				pboard = new Pboard(pbnum, email, pbdate, pbsubj, pbcont, pfilename, pfilesize, heart, mnic);
 			}
 		} catch (Exception e) {
+			System.out.println(444);
 			System.out.println("content: " + e.getMessage());
 		}finally {
 			try {
@@ -212,8 +218,8 @@ public class PboardDao {
 	}
 	
 	//게시글 수정하기 화면 가져오기
-	public Pboard getEditContent(String phnum) {
-		return this.getContent(Integer.parseInt(phnum));
+	public Pboard getEditContent(String pbnum) {
+		return this.getContent(Integer.parseInt(pbnum));
 		//조회화면과 동일 (기존에 있는 함수 재활용)
 	}
 	
@@ -226,7 +232,7 @@ public class PboardDao {
 		int row = 0;
 		
 		try {
-			int phnum = boarddata.getPhnum();
+			int pbnum = boarddata.getPbnum();
 			String email = boarddata.getEmail();
 			String pbsubj = boarddata.getPbsubj();
 			String pbcont = boarddata.getPbcont();
@@ -235,7 +241,7 @@ public class PboardDao {
 			
 			conn = ConnectionHelper.getConnection("oracle");// 추가
 			String sql_udpate = "update Pboard set email=? , pbsubj=? , pbcont=? ,"+
-			                    "filename=? where phnum=?";
+			                    "filename=? where pbnum=?";
 			
 			//업데이트
 			pstmt = conn.prepareStatement(sql_udpate);
@@ -243,7 +249,7 @@ public class PboardDao {
 			pstmt.setString(2, pbsubj);
 			pstmt.setString(3, pbcont);
 			pstmt.setString(4, pfilename);
-			pstmt.setInt(5, phnum);
+			pstmt.setInt(5, pbnum);
 			row = pstmt.executeUpdate();
 			//System.out.println("row : " + row);
 		} catch (Exception e) {
@@ -261,7 +267,7 @@ public class PboardDao {
 	}
 	
 	//게시글 삭제하기
-	public int deleteOk(String phnum) {
+	public int deleteOk(String pbnum) {
 		//일반게시판 : 삭제 ...
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -269,10 +275,10 @@ public class PboardDao {
 		try {
 				conn = ConnectionHelper.getConnection("oracle"); 
 				
-				String sql = "delete from Pboard where phnum=?";
+				String sql = "delete from Pboard where pbnum=?";
 				pstmt = conn.prepareStatement(sql);
 
-				pstmt.setString(1, phnum);
+				pstmt.setString(1, pbnum);
 			 	row = pstmt.executeUpdate();
 
 		} catch (Exception e) {
@@ -290,15 +296,15 @@ public class PboardDao {
 	}	
 	
 	//하트수 증가
-	public boolean getHeart(String phnum) {
+	public boolean getHeart(String pbnum) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		boolean result = false;
 		try {
 			conn = ConnectionHelper.getConnection("oracle");// 추가
-			String sql="update Pboard set heart = heart + 1 where phnum=?";
+			String sql="update Pboard set heart = heart + 1 where pbnum=?";
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, phnum);
+			pstmt.setString(1, pbnum);
 			
 			int row = pstmt.executeUpdate();
 			if(row > 0 ) {
@@ -318,7 +324,7 @@ public class PboardDao {
 		return result;
 	}
 	
-	//댓글 입력하기 (Table Memo : fk(Pboard phnum) )
+	//댓글 입력하기 (Table Memo : fk(Pboard pbnum) )
 	public int replywrite(int pbnum_fk , String email, String mmcont) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -355,7 +361,12 @@ public class PboardDao {
 		
 		try {
 			conn = ConnectionHelper.getConnection("oracle");// 추가
-			String reply_sql = "select * from Memo where pbnum_fk=? order by memonum desc";
+			String reply_sql = "select B.memonum, B.email, B.mmdate, B.mmcont, B.pbnum_fk, A.mnic\r\n"
+								+ "from Member A\r\n"
+								+ "JOIN Memo B\r\n"
+								+ "ON A.email = B.email\r\n"
+								+ "where pbnum_fk=2\r\n"
+								+ "order by memonum desc;";
 			
 			pstmt = conn.prepareStatement(reply_sql);
 			pstmt.setString(1, pbnum_fk);
@@ -371,8 +382,9 @@ public class PboardDao {
 				java.sql.Date mmdate = rs.getDate("mmdate");
 				String mmcont = rs.getString("mmcont");
 				int pbnum = Integer.parseInt(rs.getString("pbnum_fk"));
+				String mnic = rs.getString("mnic");
 				
-				Memo replydto = new Memo(memonum, email, mmdate, mmcont, pbnum);
+				Memo replydto = new Memo(memonum, email, mmdate, mmcont, pbnum, mnic);
 				list.add(replydto);
 			}
 			
@@ -394,8 +406,8 @@ public class PboardDao {
 	public int replyDelete(String memonum) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
-		ResultSet rs = null;
 		int row = 0;
+		System.out.println(memonum);
 		
 		try {
 			

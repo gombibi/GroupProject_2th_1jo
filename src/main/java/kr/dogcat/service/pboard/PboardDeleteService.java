@@ -6,6 +6,7 @@ import javax.servlet.http.HttpSession;
 
 import kr.dogcat.action.Action;
 import kr.dogcat.action.ActionForward;
+import kr.dogcat.dao.PboardDao;
 import kr.dogcat.dto.Member;
 
 public class PboardDeleteService implements Action {
@@ -21,22 +22,38 @@ public class PboardDeleteService implements Action {
 		String useremail = m.getEmail();
 		
 		//글번호 받기
-		String phnum= request.getParameter("phnum"); 
+		String pbnum= request.getParameter("pbnum"); 
 		
 		ActionForward forward = null;
 		
 		try {
 			//글 번호를 가지고 오지 않았을 경우 예외처리
-			if(phnum == null || phnum.trim().equals("")){
+			if(pbnum == null || pbnum.trim().equals("")){
 				System.out.println("글번호 입력 오류");
 				response.sendRedirect("PboardList.pg");
 			}
 			
-	        request.setAttribute("phnum", phnum);
+			PboardDao dao = new PboardDao();
+			int result = dao.deleteOk(pbnum);
+
+			String msg="";
+			String url="";
+			
+			if(result > 0){
+				msg="삭제되었습니다.";
+				url="PboardList.pg";
+			}else{
+				msg="삭제 실패";
+				url="PboardList.pg";
+			}
+	        
+			request.setAttribute("board_msg",msg);
+			request.setAttribute("board_url",url);
 	        
 	        forward = new ActionForward();
 	        forward.setRedirect(false);
-	        forward.setPath("/WEB-INF/board/board_delete.jsp");
+			forward.setPath("/WEB-INF/views/redirect.jsp");
+
 			
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -27,7 +27,7 @@ public class PboardEditOkService implements Action {
 		String useremail = m.getEmail();
 		
 		//글번호 받기
-		String phnum= request.getParameter("phnum"); 
+		String pbnum= request.getParameter("pbnum"); 
 		
 		//첨부파일 <file>
 		String uploadpath = request.getSession().getServletContext().getRealPath("upload");
@@ -37,7 +37,7 @@ public class PboardEditOkService implements Action {
 		
 		try {
 			//글 번호를 가지고 오지 않았을 경우 예외처리
-			if(phnum == null || phnum.trim().equals("")){
+			if(pbnum == null || pbnum.trim().equals("")){
 				System.out.println("글번호 입력 오류");
 				response.sendRedirect("PboardList.pg");
 			}
@@ -65,7 +65,7 @@ public class PboardEditOkService implements Action {
 			}
 			
 			Pboard pboard = new Pboard();
-			pboard.setPhnum(Integer.parseInt(phnum));
+			pboard.setPbnum(Integer.parseInt(pbnum));
 			pboard.setEmail(email);
 			pboard.setPbsubj(pbsubj);
 			pboard.setPbcont(pbcont);
@@ -82,7 +82,7 @@ public class PboardEditOkService implements Action {
 	        	url ="PboardList.pg";
 	        }else{
 	        	msg="수정 실패";
-	        	url="PboardEdit.pg?phnum=" + phnum;
+	        	url="PboardEdit.pg?pbnum=" + pbnum;
 	        }
 	        
 	        request.setAttribute("board_msg", msg);

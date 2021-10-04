@@ -35,11 +35,11 @@ public class MemberLoginService implements Action {
 				session.setAttribute("loginUser", m);
 				
 				// 이동처리
-				url = "Index.jsp";
+				url = "index.jsp";
 
 				forward = new ActionForward();
 				forward.setRedirect(false); // forward
-				forward.setPath("Index.jsp"); //front 주소 확인
+				forward.setPath("index.jsp"); //front 주소 확인
 
 			} else {
 				msg = "로그인 실패";

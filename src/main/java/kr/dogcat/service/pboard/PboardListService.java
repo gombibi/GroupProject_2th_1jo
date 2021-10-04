@@ -5,10 +5,13 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import kr.dogcat.action.Action;
 import kr.dogcat.action.ActionForward;
+import kr.dogcat.dao.MemberDao;
 import kr.dogcat.dao.PboardDao;
+import kr.dogcat.dto.Member;
 import kr.dogcat.dto.Pboard;
 import kr.dogcat.utils.ThePager;
 
@@ -17,12 +20,16 @@ public class PboardListService implements Action {
 	@Override
 	public ActionForward execute(HttpServletRequest request, HttpServletResponse response) {
 		
+		HttpSession session = request.getSession();
+
 		response.setContentType("text/html; charset=UTF-8");
 		
 		ActionForward forward = null;
 		
+		String msg = "";
+		String url = "";
+		
 		try {
-
 			PboardDao dao = new PboardDao();
 			int totalboardcount = dao.totalBoardCount();
 			
@@ -73,7 +80,6 @@ public class PboardListService implements Action {
 			forward = new ActionForward();
 			forward.setRedirect(false);
 			forward.setPath("/WEB-INF/views/pboard/PboardList.jsp");
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
