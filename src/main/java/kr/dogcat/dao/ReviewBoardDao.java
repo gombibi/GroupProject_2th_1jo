@@ -7,7 +7,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
+
 import kr.dogcat.dto.ReviewBoard;
 import kr.dogcat.utils.ConnectionHelper;
 
@@ -207,30 +209,63 @@ public class ReviewBoardDao {
 		return boardcont;
 	}
 
-	// 게시글 수정하기 화면
-	public String getEditContent(String rbnum) {
-		return this.getContent(Integer.parseInt(rbnum));
-		// 조회화면 동일 (기존에 있는 함수 재활용)
+	// 게시글 수정하기 화면으로 이동
+	public ReviewBoard getEditContent(String rbnum) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		ReviewBoard board = null;
+
+		try {
+			conn = ConnectionHelper.getConnection("oracle");
+			String sql = "select rbnum, rbsubj, rbcont, point from Rboard where rbnum=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, Integer.parseInt(rbnum));
+
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				board.setRbnum(rs.getInt("rbnum"));
+				board.setRbsubj(rs.getString("rbsubj"));
+				board.setRbcont(rs.getString("rbcont"));
+				board.setPoint(rs.getInt("point"));
+			}
+
+		} catch (Exception e) {
+			System.out.println("content: " + e.getMessage());
+		} finally {
+			try {
+				ConnectionHelper.close(pstmt);
+				ConnectionHelper.close(rs);
+				ConnectionHelper.close(conn);
+			} catch (Exception e2) {
+
+			}
+		}
+
+		return board;
 	}
+	
 
 	// 게시글 수정하기 처리
-	public int boardEdit(HttpServletRequest reviewboard) {
-		int rbnum = Integer.parseInt(reviewboard.getParameter("rbnum"));
-		String rbsubj = reviewboard.getParameter("rbsubj");
-		String rbcont = reviewboard.getParameter("rbcont");
-
+	public int boardEdit(HttpServletRequest boarddata) {
+		int rbnum= Integer.parseInt(boarddata.getParameter("rbnum"));
+		String rbsubj= boarddata.getParameter("rbsubj");
+		String rbcont= boarddata.getParameter("rbcont");
+		int point= Integer.parseInt(boarddata.getParameter("point"));
+		
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		int row = 0;
 
 		try {
 			conn = ConnectionHelper.getConnection("oracle");
-			String sql_udpate = "update Rboard set rbsubj=? , rbcont=? where rbnum=?";
+			String sql_udpate = "update Rboard set rbsubj=? , rbcont=? , point=? where rbnum=?";
 
 			pstmt = conn.prepareStatement(sql_udpate);
 			pstmt.setString(1, rbsubj);
 			pstmt.setString(2, rbcont);
-			pstmt.setInt(3, rbnum);
+			pstmt.setInt(3, point);
+			pstmt.setInt(4, rbnum);
 
 			row = pstmt.executeUpdate();
 

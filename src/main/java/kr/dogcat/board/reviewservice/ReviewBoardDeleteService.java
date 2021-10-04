@@ -16,7 +16,6 @@ public class ReviewBoardDeleteService implements Action {
 
 		int rbnum = Integer.parseInt(request.getParameter("rbnum"));
 		String cpage = request.getParameter("cp"); // 현재 페이지
-		String pagesize = request.getParameter("ps"); // 한 페이지당 조회 건수
 		
 		ActionForward forward = new ActionForward();
 		HttpSession session = request.getSession();
@@ -28,7 +27,7 @@ public class ReviewBoardDeleteService implements Action {
 		
 		if(!useremail.equals("admin@dogcat.com")) {
 			msg="관리자만 삭제할 수 있습니다 !";
-			url="ReviewBoardContent.bd?cp="+cpage+"&ps="+pagesize+"&rbnum="+rbnum;
+			url="ReviewBoardList.bd?cp="+cpage;
 			
 			request.setAttribute("board_msg", msg);
 			request.setAttribute("board_url", url);
@@ -47,10 +46,10 @@ public class ReviewBoardDeleteService implements Action {
 			
 			if(result > 0){
 				msg="삭제 성공 !";
-				url="ReviewBoardList.bd";
+				url="ReviewBoardList.bd?cp="+cpage;
 			}else{
 				msg="삭제 실패 !";
-				url="ReviewBoardList.bd";
+				url="ReviewBoardList.bd?cp="+cpage;
 			}
 			
 		} catch (Exception e) {

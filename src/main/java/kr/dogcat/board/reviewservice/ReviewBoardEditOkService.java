@@ -12,6 +12,7 @@ public class ReviewBoardEditOkService implements Action {
 	@Override
 	public ActionForward execute(HttpServletRequest request, HttpServletResponse response) {
 		String rbnum = request.getParameter("rbnum");
+		String cpage = request.getParameter("cpage");
 
 		String msg = "";
 		String url = "";
@@ -30,7 +31,7 @@ public class ReviewBoardEditOkService implements Action {
 				
 				if (result > 0) {
 					msg = "수정이 완료되었습니다 !";
-					url = "ReviewBoardList.bd";
+					url = "ReviewBoardList.bd?cp="+cpage;
 				} else {
 					msg = "수정 작업을 완료하지 못했습니다 !";
 					url = "ReviewBoardEdit.bd?rbnum=" + rbnum;

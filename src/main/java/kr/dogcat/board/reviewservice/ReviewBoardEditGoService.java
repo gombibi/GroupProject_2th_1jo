@@ -18,9 +18,8 @@ public class ReviewBoardEditGoService implements Action {
 	public ActionForward execute(HttpServletRequest request, HttpServletResponse response) {
 				
 		String rbnum = request.getParameter("rbnum");
-		String cpage = request.getParameter("cp"); // 현재 페이지
-		String pagesize = request.getParameter("ps"); // 한 페이지당 조회 건수
 		String mnic = request.getParameter("mnic");
+		String cpage = request.getParameter("cpage");
 
 		String msg="";
 	    String url="";
@@ -34,7 +33,7 @@ public class ReviewBoardEditGoService implements Action {
 		
 		if(rbnum == null || rbnum.trim().equals("")){
 			try {
-				response.sendRedirect("ReviewBoardList.bd");  //cpage=1 , ps=10
+				response.sendRedirect("ReviewBoardList.bd");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -56,7 +55,7 @@ public class ReviewBoardEditGoService implements Action {
 		}else if(!usernick.equals(mnic)){
 			
 			msg="해당 글의 작성자가 아닙니다 !";
-		    url="ReviewBoardContent.bd?cp="+cpage+"&ps="+pagesize+"&rbnum="+rbnum;
+		    url="ReviewBoardContent.bd";
 		    
 			request.setAttribute("board_msg", msg);
 			request.setAttribute("board_url", url);
@@ -85,6 +84,7 @@ public class ReviewBoardEditGoService implements Action {
 					
 				}else {
 					
+					request.setAttribute("cpage", cpage);
 					request.setAttribute("rbnum", rbnum);
 					request.setAttribute("board", board);
 					

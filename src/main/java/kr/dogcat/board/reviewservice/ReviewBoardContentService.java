@@ -17,7 +17,7 @@ public class ReviewBoardContentService implements Action {
 
 		String rbnum = request.getParameter("rbnum"); // 글번호
 
-		String cont="";
+		String cont;
 
 		try {
 			

@@ -55,29 +55,60 @@
 	;
 </style>
 <script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
 <script type="text/javascript" type="text/css">
 	$(document).ready(function() {
-
-		$('.clickmnic').click(function() {
-			var clickrbnum = $(this).attr("id");
-			console.log(clickrbnum);
-			if ($('.' + clickrbnum).css("display") == ('none') {
-				$('.' + clickrbnum).css("display", '');
-			} else {
-				$('.' + clickrbnum).css("display", 'none');
-			}
-		});
 		
-		$('.modbtn').click(function() {
-			var clickmodbtn = $(this).attr("id");
-			console.log(clickmodbtn);
-			if ($('.' + clickmodbtn).css("display") == ('none') {
-				$('.' + clickmodbtn).css("display", '');
-			} else {
-				$('.' + clickmodbtn.css("display", 'none');
+		/* 비동기식 글 내용 보기 */
+		$('.clickmnic').on("click", function() {
+			let clickrbnum = $(this).attr("id");
+			let clickmnick = $(this).next().text();
+			
+			let form_data ={rbnum:$(this).attr("id")};
+			
+			if($('#'+clickrbnum+clickmnick).html()==""){
+				
+				$.ajax(
+						{
+							url:"ReviewBoardContent.bd",
+							type:"POST",
+							dataType:"html",
+							data:form_data,
+							success:function(responsedata){
+								let result = responsedata.trim();
+
+								$('#'+clickrbnum+clickmnick).html("<form id='editgo' action='ReviewBoardEdit.bd' method='post'></form>"
+										+"<td colspan='1' id='reviewboard_body_update'>"
+										+"<input form='editgo' type='hidden' name='rbnum' value='"+clickrbnum+"'>"
+										+"<input form='editgo' type='hidden' name='mnic' value='"+clickmnick+"'>"
+										+"<input form='editgo' type='hidden' name='cpage' value='${cpage}'>"
+										+"</td>"
+										+"<td colspan='2' id='reviewboard_body_rbcont' style='background-color: #ddf0ef;' align='left'>"
+										+responsedata+"</td>"
+										+"<td colspan='2' id='reviewboard_body_rbcont' align='center'>"
+										+"<input form='editgo' type='submit' value='수정'>"
+										+"<form id='delgo' action='ReviewBoardDelete.bd' method='post'></form>"
+										+"<input form='delgo' type='submit' value='삭제'>"
+										+"<input form='delgo' type='hidden' name='rbnum' value='"+clickrbnum+"'>"
+										+"<form id='rego' action='ReviewBoardDelete.bd' method='post'></form>"
+										+"<input form='rego' type='button' value='답글'>"
+										+"</td>");
+
+							},
+							error:function(xhr){
+								console.log(xhr.status);
+							}
+							}		 
+					 );
+				
+			}else{
+				
+				$('#'+clickrbnum+clickmnick).html("");
+				
 			}
+			 
+			
 		});
 
 	});
@@ -92,6 +123,7 @@
 	<c:set var="list" value="${requestScope.list}"></c:set>
 	<c:set var="totalboardcount" value="${requestScope.totalboardcount}"></c:set>
 	<c:set var="pager" value="${requestScope.pager}"></c:set>
+	<c:set var="login" value="${sessionScope.userid}" />
 	<jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
 
 	<div id="reveiwBoardListContainer">
@@ -131,24 +163,7 @@
 								test="${board.point == 1}"> 💙🤍🤍🤍🤍 </c:if></td>
 						<td align="center">${board.rbdate}</td>
 					</tr>
-					<tr>
-						<td class="${board.rbnum}" colspan="1"
-							id="reviewboard_body_update" style="display: none;"><button class="modbtn" id="${board.mnic}">수정</button></td>
-						<td class="${board.rbnum}" colspan="4"
-							id="reviewboard_body_rbcont"
-							style="background-color: #ddf0ef; display: none;" align="left">${board.rbcont}</td>
-					</tr>
-					<tr>
-						<td class="${board.mnic}" colspan="1"
-							id="reviewboard_body_update" style="display: none;"><button>완료</button></td>
-						<td class="${board.mnic}" colspan="1"
-							id="reviewboard_body_rbcont"
-							style="background-color: #ddf0ef; display: none;" align="left"><textarea
-								name="rbcont" id="rbcont" cols="65" style="resize: none;">${board.rbcont}</textarea></td>
-						<td class="${board.mnic}" colspan="3"
-							id="reviewboard_body_rbcont"
-							style="background-color: #ddf0ef; display: none;" align="left"></td>
-					</tr>
+					<tr id="${board.rbnum}${board.mnic}"></tr>
 				</c:forEach>
 
 
@@ -159,7 +174,7 @@
 					<td colspan="4"></td>
 					<td colspan="1" align="center">
 						<button type="submit" class="about-view packages-btn"
-							onclick="location.href = 'ReviewBoardWrite.bd';"> 글쓰기 </button>
+							onclick="location.href = 'ReviewBoardWrite.bd';">글쓰기</button>
 					</td>
 				</tr>
 			</table>
