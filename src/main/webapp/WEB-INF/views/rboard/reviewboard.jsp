@@ -50,9 +50,69 @@
 	href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@100,300,400,500,700,900"
 	rel="stylesheet" />
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap');
+@import
+	url('https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap')
+	;
 </style>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
+<script type="text/javascript" type="text/css">
+	$(document).ready(function() {
+		
+		/* 비동기식 글 내용 보기 */
+		$('.clickmnic').on("click", function() {
+			let clickrbnum = $(this).attr("id");
+			let clickmnick = $(this).next().text();
+			
+			let form_data ={rbnum:$(this).attr("id")};
+			
+			if($('#'+clickrbnum+clickmnick).html()==""){
+				
+				$.ajax(
+						{
+							url:"ReviewBoardContent.bd",
+							type:"POST",
+							dataType:"html",
+							data:form_data,
+							success:function(responsedata){
+								let result = responsedata.trim();
+
+								$('#'+clickrbnum+clickmnick).html("<form id='editgo' action='ReviewBoardEdit.bd' method='post'></form>"
+										+"<td colspan='1' id='reviewboard_body_update'>"
+										+"<input form='editgo' type='hidden' name='rbnum' value='"+clickrbnum+"'>"
+										+"<input form='editgo' type='hidden' name='mnic' value='"+clickmnick+"'>"
+										+"<input form='editgo' type='hidden' name='cpage' value='${cpage}'>"
+										+"</td>"
+										+"<td colspan='2' id='reviewboard_body_rbcont' style='background-color: #ddf0ef;' align='left'>"
+										+responsedata+"</td>"
+										+"<td colspan='2' id='reviewboard_body_rbcont' align='center'>"
+										+"<input form='editgo' type='submit' value='수정'>"
+										+"<form id='delgo' action='ReviewBoardDelete.bd' method='post'></form>"
+										+"<input form='delgo' type='submit' value='삭제'>"
+										+"<input form='delgo' type='hidden' name='rbnum' value='"+clickrbnum+"'>"
+										+"<form id='rego' action='ReviewBoardDelete.bd' method='post'></form>"
+										+"<input form='rego' type='button' value='답글'>"
+										+"</td>");
+
+							},
+							error:function(xhr){
+								console.log(xhr.status);
+							}
+							}		 
+					 );
+				
+			}else{
+				
+				$('#'+clickrbnum+clickmnick).html("");
+				
+			}
+			 
+			
+		});
+
+	});
+</script>
 
 </head>
 
@@ -63,6 +123,7 @@
 	<c:set var="list" value="${requestScope.list}"></c:set>
 	<c:set var="totalboardcount" value="${requestScope.totalboardcount}"></c:set>
 	<c:set var="pager" value="${requestScope.pager}"></c:set>
+	<c:set var="login" value="${sessionScope.userid}" />
 	<jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
 
 	<div id="reveiwBoardListContainer">
@@ -74,7 +135,7 @@
 					<td colspan="4" align="center"></td>
 					<td colspan="1" align="center">총 게시물 수 : ${totalboardcount}</td>
 				</tr>
-				<tr id = "reviewboard_header">
+				<tr id="reviewboard_header">
 					<td width="10%">글번호</td>
 					<td>리뷰</td>
 					<td width="15%">닉네임</td>
@@ -85,42 +146,26 @@
 
 				<!-- forEach()  목록 출력하기  -->
 				<c:forEach var="board" items="${list}">
-					<tr id = "reviewboard_body">
+					<tr id="reviewboard_body">
 						<td align="center">${board.rbnum}</td>
-						<td align="left"><c:forEach var="i" begin="1"
-								end="${board.depth}" step="1">
+						<td align="left" class="clickmnic" id="${board.rbnum}"><c:forEach
+								var="i" begin="1" end="${board.depth}" step="1">
 									&nbsp;&nbsp;&nbsp;
 								</c:forEach> <c:if test="${board.depth > 0}">
 								<img src="">
 								<!-- 들여쓰기아이콘넣기 -->
-							</c:if> <a
-							href="ReviewBoardContent.bd?idx=${board.rbnum}&cp=${cpage}&ps=${pagesize}">
-								${board.rbsubj} </a></td>
-						<td align="center">${board.email}</td>
-						<td align="center">
-						<c:if test="${board.point == 5}"> 💙💙💙💙💙 </c:if>
-						<c:if test="${board.point == 4}"> 💙💙💙💙🤍 </c:if>
-						<c:if test="${board.point == 3}"> 💙💙💙🤍🤍 </c:if>
-						<c:if test="${board.point == 2}"> 💙💙🤍🤍🤍 </c:if>
-						<c:if test="${board.point == 1}"> 💙🤍🤍🤍🤍 </c:if>
-						</td>
+							</c:if> ${board.rbsubj}</td>
+						<td align="center">${board.mnic}</td>
+						<td align="center"><c:if test="${board.point == 5}"> 💙💙💙💙💙 </c:if>
+							<c:if test="${board.point == 4}"> 💙💙💙💙🤍 </c:if> <c:if
+								test="${board.point == 3}"> 💙💙💙🤍🤍 </c:if> <c:if
+								test="${board.point == 2}"> 💙💙🤍🤍🤍 </c:if> <c:if
+								test="${board.point == 1}"> 💙🤍🤍🤍🤍 </c:if></td>
 						<td align="center">${board.rbdate}</td>
 					</tr>
+					<tr id="${board.rbnum}${board.mnic}"></tr>
 				</c:forEach>
-				<tr>	<!-- 제목을 클릭하면 이 tr부분이 비동기로 추가되기 -->
-					<td id = "reviewboard_body_update"><a href=#>리뷰 수정</a></td> 
-					<td id = "reviewboard_body_rbcont" colspan="4" align="left">
-					제목을 클릭했을 때 내용이 여기에 들어가면 좋겠다 이런식으루 <br>
-					별 헤는 밤<br>
-					계절이 지나가는 하늘에는 가을로 가득 차 있습니다. 나는 아무 걱정도 없이
-					가을 속의 별들을 다 헬 듯합니다. 가슴 속에 하나 둘 새겨지는 별을 다 못 헤는 것은 
-					쉬이 아침이 오는 까닭이요, 내일 밤이 남은 까닭이요, 아직 나의 청춘이 다하지 않은 
-					까닭입니다. <br>
-					어쩌구저쩌구... 배고프다 <br>
-					근데 리뷰 내용에 br 태그 먹이는건 어떻게 하지... DB에 자동으로 들어가게 해야 하나
-					이것도 연구해야겟당
-					</td>
-				</tr>
+
 
 				<tr id="review_write_btn">
 					<td colspan="5" align="center">${pager}</td>

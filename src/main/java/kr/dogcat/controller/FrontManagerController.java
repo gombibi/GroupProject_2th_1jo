@@ -20,6 +20,7 @@ import kr.dogcat.board.manager.ReserveVisitingSearchService;
 import kr.dogcat.board.manager.ReserveWalkingCommitService;
 import kr.dogcat.board.manager.ReserveWalkingListService;
 import kr.dogcat.board.manager.ReserveWalkingSearchService;
+import kr.dogcat.board.manager.SitterManageListService;
 
 
 @WebServlet("*.mb")
@@ -79,6 +80,9 @@ public class FrontManagerController extends HttpServlet {
     		action = new MemberManageSearchService();
     		forward = action.execute(request, response);
 
+    	}else if(url_Command.equals("/SitterManageList.mb")) { // 시터 목록 조회
+    		action = new SitterManageListService();
+    		forward = action.execute(request, response);
     	}
     	
     	//-------위 : 클라이언트요청 -> 컨트롤러 -> 서비스 -----------아래 : 서비스 -> 컨트롤러 -> view

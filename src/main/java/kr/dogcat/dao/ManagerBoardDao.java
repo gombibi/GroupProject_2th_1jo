@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import kr.dogcat.dto.Emp;
 import kr.dogcat.dto.MemberBoard;
 import kr.dogcat.dto.VisitingBoard;
 import kr.dogcat.dto.WalkingBoard;
@@ -566,6 +567,54 @@ public class ManagerBoardDao {
 		}
 
 		return resultrow;
+	}
+	
+	// 시터 조회
+	public List<Emp> slist(int acode) {
+
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List<Emp> list = null;
+		try {
+			conn = ConnectionHelper.getConnection("oracle");
+
+			String sql = "select e.enum, e.ename, e.ephoto, e.eintro, z.aname "
+					   + "from Emp e join zipcode z on e.acode = z.acode "
+					   + "where e.acode=? "
+					   + "order by e.enum asc"; 
+
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, acode);
+
+			rs = pstmt.executeQuery();
+			list = new ArrayList<Emp>();
+			
+			while (rs.next()) {
+
+				Emp emp = new Emp();
+				emp.setEmpno(rs.getInt("enum"));
+				emp.setEname(rs.getString("ename"));
+				emp.setEphoto(rs.getString("ephoto"));
+				emp.setEintro(rs.getString("eintro"));
+				emp.setAname(rs.getString("aname"));
+
+				list.add(emp);
+			}
+
+		} catch (Exception e) {
+			System.out.println("오류 :" + e.getMessage());
+		} finally {
+			try {
+				ConnectionHelper.close(pstmt);
+				ConnectionHelper.close(rs);
+				ConnectionHelper.close(conn);// 반환
+			} catch (Exception e2) {
+
+			}
+		}
+
+		return list;
 	}
 
 }

@@ -27,7 +27,7 @@
 									<ul class="nav navbar-nav navbar-right">
 										<li class="smooth-menu"><a href="#">시터리스트</a></li>
 										<li class="smooth-menu"><a href="PboardList.pg">포토갤러리</a></li>
-										<li class="smooth-menu"><a href="#">리뷰</a></li>
+										<li class="smooth-menu"><a href="/ReviewBoardList.bd">리뷰게시판</a></li>
 										
 										<c:set var="usernic" value="${loginUser.mnic}"/> <!-- sessionScope 생략 -->
 											<c:choose>
@@ -38,7 +38,6 @@
 													<b>로그인 하지 않으셨네요</b>
 												</c:otherwise>
 											</c:choose>
-											
 										<li>
 											<form action="Login_temp.jsp" method=""><button class="book-btn">Login </button></form>
 										</li><!--/.project-btn--> 
