@@ -58,10 +58,92 @@
 <link rel="stylesheet" href="css/responsive.css" />
 
 <!--reviewboard.css-->
-<link rel="stylesheet" href="css/reviewboard.css" />
+<!-- <link rel="stylesheet" href="css/reviewboard.css" />
+ -->
+<link rel="stylesheet" href="css/photostyle.css?ver=1" />
+
+<style>
+body {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+
+}
+
+h1{
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	padding-top: 150px;
+}
+
+#tablesize {
+	width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+th {
+	text-align: center;
+}
+
+#text-container {
+	margin: 5px;
+	width: 800px;
+	height: 100px;
+	border-radius: 15px;
+	
+}
+
+#btn {
+	margin-right: 5px;
+	margin-bottom: 5px;
+}
+
+table{
+	border-collapse: separate;
+  	border-spacing: 10px 10px;
+  	border: 1px solid lightgray;
+  	
+}
+
+#tableh {
+	border-bottom: 1px dotted #00d8d5;
+	border-right: none;
+	border-left: none;
+	border-top: none;
+	border-radius: 0px;
+	color: black;
+	
+}
+
+#tableh1 {
+	border-right: none;
+	border-left: none;
+	border-top: none;
+	border-bottom: none;
+}
+
+.textar {
+	width: 100%;
+	height: 100px;
+	padding: 5px;
+	margin: 5px;
+}
+
+
+
+#tablehreply {
+	border: 1px solid #00d8d5;
+	border-radius: 5px;
+}
+</style>
+
 
 </head>
 <body>
+	
+	
 	<jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
 
 
@@ -78,59 +160,71 @@
 	<c:set var="replylist" value="${requestScope.replylist}"></c:set>
 
 	<div id="reveiwBoardListContainer">
-		<h1>글보기</h1>
-		<table border="1">
+		<h1>포토갤러리</h1>
+		<table id="tablesize" border="1">
 			<tr>
-				<td width="10%" align="center">글번호</td>
-				<td width="20%">${pbnum}</td>
-				<td width="30%" align="center">♥ ${pboard.heart}</td>
+				<td id="tableh1" width="10%" align="center"><b>글번호</b></td><br><br>
+				<td id="tableh" width="35%">${pbnum}</td>
+				<td id="tableh1" width="10%" align="center">♥ ${pboard.heart}</td>
+				<td id="tableh" width="40%" align="center"></td>
 			</tr>
 			<tr>
-				<td width="10%" align="center">글쓴이</td>
-				<td width="20%">${pboard.mnic}</td>
-				<td width="10%" align="center">이메일</td>
-				<td width="20%">${pboard.email}</td>
+				<td id="tableh1" width="10%" align="center"><b>글쓴이</b></td>
+				<td id="tableh" width="20%">${pboard.mnic}</td>
+				<td id="tableh1" width="10%" align="center"><b>이메일</b></td>
+				<td id="tableh" width="20%">${pboard.email}</td>
 			</tr>
 			<!-- 첨부파일 <file> -->
 			<tr>
-				<td width="10%" align="center"><b>이미지</b></td>
-				<td><c:set var="originalfilename" value="${pboard.pfilename}" />
-					<c:set var="lowerfilename"
-						value="${fn:toLowerCase(originalfilename)}" /> <c:forTokens
-						var="file" items="${lowerfilename}" delims="." varStatus="status">
+				<td id="tableh1" width="10%" align="center"><b>이미지</b></td>
+				<td id="tableh">
+				<img alt="" src="upload/${pboard.pfilename}" style="width: 200px; height: 150px">
+				</td>
+				
+					<c:set var="originalfilename" value="${pboard.pfilename}" /></td>
+					<c:set var="lowerfilename"  value="${fn:toLowerCase(originalfilename)}" /> 
+					
+					<c:forTokens var="file" items="${lowerfilename}" delims="." varStatus="status">
 						<c:if test="${status.last}">
 							<a href="upload/${originalfilename}" target="_blank">미리보기</a>
 						</c:if>
-					</c:forTokens></td>
+					</c:forTokens>
 				<!-- 첨부파일 <file> -->
 			</tr>
 			<tr>
-				<td width="10%" align="center"><b>제목</b></td>
-				<td colspan="3">${pboard.pbsubj}</td>
-			</tr>
-			<tr height="100">
-				<td width="10%" align="center"><b>글내용</b></td>
-				<td colspan="3">${fn:replace(pboard.pbcont, newLineChar,"<br>")}</td>
+				<td id="tableh1" width="10%" align="center"><b>제목</b></td>
+				<td id="tableh" colspan="3">${pboard.pbsubj}</td>
 			</tr>
 			<tr>
+					<td id="tableh1" colspan="4" align="left"><b>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp글내용</b></td>
+			</tr>
+			
+			<tr height="100">
+<!-- 				<td id="tableh" width="10%" align="center"><b>글내용</b></td>
+ -->				<td id="tableh1" colspan="4">${fn:replace(pboard.pbcont, newLineChar,"<br>")}</td>
+
+			</tr>
+			
+			
+			<tr>
 				<c:choose>
-					<c:when
-						test="${usermail=='admin@dogcat@com' || usermail==pboard.email}">
-						<td colspan="4" align="center"><a
-							href="PboardList.pg?cp=${cpage}&ps=${pagesize}">목록가기</a> | <a
-							href="PboardEdit.pg?pbnum=${pbnum}&cp=${cpage}&ps=${pagesize}">편집</a>
+					<c:when test="${usermail=='admin@dogcat@com' || usermail==pboard.email}">
+						<td id="tableh1" colspan="4" align="right"><a
+							href="PboardList.pg?cp=${cpage}&ps=${pagesize}">목록가기</a> | 
+							<a href="PboardEdit.pg?pbnum=${pbnum}&cp=${cpage}&ps=${pagesize}">편집</a>
 							| <a
 							href="PboardDelete.pg?pbnum=${pbnum}&cp=${cpage}&ps=${pagesize}">삭제</a>
 							|</td>
 					</c:when>
 					<c:otherwise>
-						<td colspan="2" align="center"><a
-							href="PboardList.pg?cp=${cpage}&ps=${pagesize}">목록가기</a> |</td>
+						<td id="tableh1" colspan="4" align="center"><a
+							href="PboardList.pg?cp=${cpage}&ps=${pagesize}">목록가기</a></td>
 					</c:otherwise>
 				</c:choose>
 
 			</tr>
 		</table>
+		
 
 		<!--  꼬리글 달기 테이블 -->
 		<form name="reply" action="PboardReply.pg" method="POST">
@@ -138,18 +232,32 @@
 			<input type="hidden" name="pbnum" value="${pbnum}"> 
 			<input type="hidden" name="email" value="${loginUser.email}">
 			<!-- hidden data -->
-			<table width="80%" border="1">
+			<br>
+			<table width="100%" border="1">
+				<tr></tr>
 				<tr>
-					<th colspan="2">덧글 쓰기</th>
+					<td id="tableh1" colspan="2" align="left">덧글 쓰기</td>
 				</tr>
-				<tr>
-					<td align="left">작성자 : ${usernic} 
-					<input type="hidden" name="mnic" value="${usernic}"> 
-					<textarea name="mmcont" rows="2" cols="50"></textarea>
-					</td>
-					<td align="left"><input type="button" value="등록"
-						onclick="reply_check()"></td>
-				</tr>
+				<c:choose>
+					<c:when	test="${usermail==null}">
+						<td align="center">
+							<a href="Login_temp.jsp">로그인</a>해야 등록 가능</td>
+					</c:when>
+					<c:otherwise>
+						<tr >
+							<td  align="right" id="tableh1">
+							<input type="hidden" name="mnic" value="${usernic}"> 
+							<textarea  class="textar" id="tablehreply" id="text-container" name="mmcont" rows="2" cols="50" placeholder="&nbsp&nbsp&nbsp&nbsp&nbsp덧글을 작성해주세요."></textarea>
+							작성자 : ${usernic} &nbsp&nbsp&nbsp <input id="btn" type="button" value="등록"
+								onclick="reply_check()">
+							</td>
+							
+						</tr>
+					</c:otherwise>
+				</c:choose>
+				
+				
+
 			</table>
 		</form>
 
@@ -162,16 +270,19 @@
 						<th colspan="2">답변</th>
 					</tr>
 					<tr align="left">
-						<td width="80%">[${reply.email}] : ${reply.mmcont} <br>
+						<td width="80%">[${reply.mnic}] : ${reply.mmcont} <br>
 							작성일:${reply.mmdate}
 						</td>
 						<td width="20%">
 							<form action="PboardReplyDelete.pg" method="POST" name="replyDel">
 								<input type="hidden" name="replyemail" value="${reply.email}">
-
 								<input type="hidden" name="memonum" value="${reply.memonum}">
 								<input type="hidden" name="pbnum" value="${reply.pbnum_fk}">
+								
+								<!-- 세션 아이디와 댓글 등록한 아이디가 동일해야 삭제 버튼 보이기 -->
+								<c:if test = "${loginUser.email == reply.email}">
 								<input type="button" value="삭제" onclick="reply_del(this.form)">
+								</c:if>
 							</form>
 						</td>
 					</tr>
@@ -180,35 +291,29 @@
 		</c:if>
 
 	</div>
-	<!-- 유효성 체크	 -->
-	<script type="text/javascript">
-		function reply_check() {
-			var frm = document.reply;
-			if (frm.mmcont.value == "") {
-				alert("리플 내용을 입력해주세요.");
-				return false;
-			}
+
+</body>
+<!-- 유효성 체크	 -->
+<script type="text/javascript">
+	function reply_check() {
+		var frm = document.reply;
+		
+		if (frm.mmcont.value == "") {
+			alert("리플 내용을 입력해주세요.");
+			return false;
+		}else{
 			frm.submit();
 		}
-
-		function reply_del(frm) {
-
-			$.ajax({
-				url : "Replydelete",
-				type : 'POST',
-				datatype : "text",
-				data : {
-					"memonum" : frm.memonum.value,
-					"pbnum_fk" : frm.pbnum.value
-				},
-				success : function(data) {
-					replyList();
-				},
-				error : function() {
-					alert('댓글 삭제 실패');
-				}
-			});
+	}
+	
+	function reply_del(frm) {
+		if (!(frm.replyemail.value == frm.useremail.value)) {
+			alert("글쓴이만 삭제 가능");
+			return false;
+		}else{
+			frm.submit();
 		}
-	</script>
-</body>
+	}
+
+</script>
 </html>

@@ -9,7 +9,6 @@ import kr.dogcat.action.Action;
 import kr.dogcat.action.ActionForward;
 import kr.dogcat.dao.ManagerBoardDao;
 import kr.dogcat.dto.WalkingBoard;
-import kr.dogcat.utils.ThePagerMSearch;
 import kr.dogcat.utils.ThePagerWSearch;
 
 public class ReserveWalkingSearchService implements Action {
@@ -17,7 +16,7 @@ public class ReserveWalkingSearchService implements Action {
 	@Override
 	public ActionForward execute(HttpServletRequest request, HttpServletResponse response) {
 		ActionForward forward = null;
-		String[] option = request.getParameterValues("option");
+		String option = request.getParameter("option");
 
 		try {
 			ManagerBoardDao mbd = new ManagerBoardDao();
@@ -44,7 +43,7 @@ public class ReserveWalkingSearchService implements Action {
 			List<WalkingBoard> list = mbd.wSearchBoard(option, cpage, pagesize); // list >> 1 , 20
 			
 			// 게시물 총 건수
-			int searchboardcount = list.size();
+			int searchboardcount = mbd.wsearchBoardCount(option);
 
 			// 전체 페이지 결정 하기
 			if (searchboardcount % pagesize == 0) { // ex) 120개 % 5개 = 24
@@ -72,7 +71,7 @@ public class ReserveWalkingSearchService implements Action {
 
 			forward = new ActionForward();
 			forward.setRedirect(false); // forward
-			forward.setPath("/WEB-INF/views/board/board_list.jsp");
+			forward.setPath("/WEB-INF/views/admin/wreservlist.jsp");
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}

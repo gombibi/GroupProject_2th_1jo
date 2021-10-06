@@ -18,8 +18,7 @@ public class PboardDeleteService implements Action {
 
 		//로그인한 멤버 객체 불러오기
 		HttpSession session = request.getSession();
-		Member m = (Member)session.getAttribute("loginUser");
-		String useremail = m.getEmail();
+		session.getAttribute("loginUser");
 		
 		//글번호 받기
 		String pbnum= request.getParameter("pbnum"); 

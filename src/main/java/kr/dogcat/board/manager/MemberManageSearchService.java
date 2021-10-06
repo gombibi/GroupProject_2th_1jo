@@ -24,7 +24,7 @@ public class MemberManageSearchService implements Action{
 
 			// 상세보기 >> 다시 LIST 넘어올때 >> 현재 페이지 설정
 			String ps = request.getParameter("ps"); // pagesize 조회 개수
-			String cp = request.getParameter("cp"); // current page 현재페이지
+			String cp = request.getParameter("cp"); // current page 현재페이지21
 
 			// List 페이지 처음 호출할 때의 default 값 설정
 			if (ps == null || ps.trim().equals("")) {
@@ -44,7 +44,7 @@ public class MemberManageSearchService implements Action{
 			List<MemberBoard> list = mbd.mSearchBoard(option, searchword, cpage, pagesize); // list >> 1 , 20
 			
 			// 게시물 총 건수
-			int searchboardcount = list.size();
+			int searchboardcount = mbd.searchBoardCount(option, searchword);
 
 			// 전체 페이지 결정 하기
 			if (searchboardcount % pagesize == 0) { // ex) 120개 % 5개 = 24
@@ -67,12 +67,12 @@ public class MemberManageSearchService implements Action{
 			request.setAttribute("cpage", cpage);
 			request.setAttribute("pagecount", pagecount);
 			request.setAttribute("list", list);
-			request.setAttribute("searchboardcount", searchboardcount);
+			request.setAttribute("totalboardcount", searchboardcount);
 			request.setAttribute("pager", pager);
 
 			forward = new ActionForward();
 			forward.setRedirect(false); // forward
-			forward.setPath("/WEB-INF/views/board/board_list.jsp");
+			forward.setPath("/WEB-INF/views/admin/memberlist.jsp");
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}

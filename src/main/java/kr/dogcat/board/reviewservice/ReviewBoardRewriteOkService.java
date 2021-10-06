@@ -12,9 +12,11 @@ public class ReviewBoardRewriteOkService implements Action {
 
 	@Override
 	public ActionForward execute(HttpServletRequest request, HttpServletResponse response) {
+		String cpage = request.getParameter("cp");
 		String strrbnum = request.getParameter("rbnum").trim();		
 		String rbsubj = request.getParameter("rbsubj");
 		String rbcont = request.getParameter("rbcont");
+		String point = request.getParameter("point");
 		String msg="";
 	    String url="";
 		
@@ -27,6 +29,7 @@ public class ReviewBoardRewriteOkService implements Action {
 			board.setRbnum(rbnum);
 			board.setRbsubj(rbsubj);
 			board.setRbcont(rbcont);
+			board.setPoint(Integer.parseInt(point));
 
 			ReviewBoardDao rbd = new ReviewBoardDao();
 			
@@ -34,10 +37,10 @@ public class ReviewBoardRewriteOkService implements Action {
 
 		    if(result > 0){
 		    	msg ="답글 달기 성공";
-		    	url ="ReviewBoardList.bd";
+		    	url ="ReviewBoardList.bd?cp="+cpage;
 		    }else{
-		    	msg="답글 달기 실패 !";
-		    	url="ReviewBoardContent.bd?idx="+board.getRbnum();
+		    	msg ="답글 달기 실패 !";
+		    	url ="ReviewBoardList.bd?cp="+cpage;
 		    }
 		    
 		} catch (Exception e) {

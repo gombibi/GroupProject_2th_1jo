@@ -117,14 +117,13 @@ input {
 
 	<div id="riveiwBoardListContainer">
 		<h1>리뷰 작성하기</h1>
-		<h3>리뷰를 써주세요 어쩌구</h3>
 		<br>
 		<div id="rboarddiv">
 			<form action="ReviewBoardWriteOK.bd" method="post" name="rbForm" id="rbForm">
 				<table id="reviewboard">	<!-- 리뷰작성테이블 -->
 					<tr id="reviewboard_write">	<!-- 닉네임 -->
 						<td id="rboard_td">닉네임</td>
-						<td id="rboard_input_text" colspan="5">${sessionScope.loginUser.mnic}<input type="hidden" name="mnic" id="mic" value="${sessionScope.loginUser.mnic}"></input></td>
+						<td id="rboard_input_text" colspan="5">${sessionScope.loginUser.mnic}<input type="hidden" name="email" id="mic" value="${sessionScope.loginUser.email}"></input></td>
 					</tr>
 					<tr id="reviewboard_write"> <!-- 제목 -->
 						<td id="rboard_td">제　목</td>

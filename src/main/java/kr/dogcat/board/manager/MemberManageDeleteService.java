@@ -16,13 +16,14 @@ public class MemberManageDeleteService implements Action {
 	@Override
 	public ActionForward execute(HttpServletRequest request, HttpServletResponse response) {
 
-		String[] num = request.getParameterValues("subject");
+		String[] num = request.getParameterValues("mc");
 		ActionForward forward = null;
 
 		try {
 			ManagerBoardDao mbd = new ManagerBoardDao();
 
 			int n = mbd.deleteMember(num);
+			System.out.println(n);
 
 			// 상세보기 >> 다시 LIST 넘어올때 >> 현재 페이지 설정
 			String ps = request.getParameter("ps"); // pagesize 조회 개수
@@ -72,7 +73,7 @@ public class MemberManageDeleteService implements Action {
 
 			forward = new ActionForward();
 			forward.setRedirect(false); // forward
-			forward.setPath("/WEB-INF/views/board/board_list.jsp");
+			forward.setPath("/WEB-INF/views/admin/memberlist.jsp");
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}

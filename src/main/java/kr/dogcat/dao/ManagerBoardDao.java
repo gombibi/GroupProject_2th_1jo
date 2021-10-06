@@ -3,7 +3,6 @@ package kr.dogcat.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -103,48 +102,70 @@ public class ManagerBoardDao {
 		return list;
 	}
 
+	// 검색 총 건수 구하기
+		public int wsearchBoardCount(String option) {
+
+			Connection conn = null;
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			String sql="";
+			int totalcount = 0;
+			try {
+				conn = ConnectionHelper.getConnection("oracle");
+				if(option.equals("all")){
+					sql = "select count(*) cnt from Reserv_w";
+					pstmt = conn.prepareStatement(sql);
+					rs = pstmt.executeQuery();
+					if (rs.next()) {
+						totalcount = rs.getInt("cnt");
+					}
+				}else {
+					sql = "select count(*) cnt from Reserv_w w join Rstatus r on w.rstatuscode = r.rstatuscode "
+							   + "where rstatus =?";
+					pstmt = conn.prepareStatement(sql);
+					pstmt.setString(1, option);
+					rs = pstmt.executeQuery();
+					if (rs.next()) {
+						totalcount = rs.getInt("cnt");
+					}
+				}
+				
+
+			} catch (Exception e) {
+
+			} finally {
+				try {
+					ConnectionHelper.close(pstmt);
+					ConnectionHelper.close(rs);
+					ConnectionHelper.close(conn);
+				} catch (Exception e) {
+
+				}
+			}
+			return totalcount;
+		}
+	
 	// 게시물 검색 - 산책
-	public List<WalkingBoard> wSearchBoard(String[] option, int cpage, int pagesize) {
+	public List<WalkingBoard> wSearchBoard(String option, int cpage, int pagesize) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		List<WalkingBoard> list = null;
 		String sql = null;
 
-		if (option.length == 0) {
-			sql = "select * from (select rownum rn, r.rnum, r.email, m.mphone, m.madd, r.udate, w.time, r.price, r.rdate, s.rstatus "
+		if (option.equals("all")) {
+				sql = "select * from (select rownum rn, r.rnum, r.email, m.mphone, m.madd, r.udate, w.time, r.price, r.rdate, s.rstatus "
 					+ "from Reserv_W r join Member m on r.email = m.email "
-					+ "join rstatus s on r.rstatuscode = s.rstatuscode " + "join Wtime w on r.wtcode = w.wtcode "
+					+ "join rstatus s on r.rstatuscode = s.rstatuscode "
+					+ "join Wtime w on r.wtcode = w.wtcode "
 					+ "ORDER BY r.rnum DESC) where rn between ? and ?";
 		} else {
-			String[] optioncheck = new String[4];
 
-			switch (option.length) {
-			case 1:
-				optioncheck[0] = option[0];
-				break;
-			case 2:
-				optioncheck[0] = option[0];
-				optioncheck[1] = option[1];
-				break;
-			case 3:
-				optioncheck[0] = option[0];
-				optioncheck[1] = option[1];
-				optioncheck[2] = option[2];
-				break;
-			case 4:
-				optioncheck[0] = option[0];
-				optioncheck[1] = option[1];
-				optioncheck[2] = option[2];
-				optioncheck[3] = option[3];
-				break;
-			}
-
-			sql = "select * from (select rownum rn, r.rnum, r.email, m.mphone, m.madd, r.udate, w.time, r.price, r.rdate, s.rstatus "
+				sql = "select * from (select rownum rn, r.rnum, r.email, m.mphone, m.madd, r.udate, w.time, r.price, r.rdate, s.rstatus "
 					+ "from Reserv_W r join Member m on r.email = m.email "
-					+ "join rstatus s on r.rstatuscode = s.rstatuscode " + "join Wtime w on r.wtcode = w.wtcode "
-					+ "where s.rstatus='" + optioncheck[0] + "' or s.rstatus='" + optioncheck[1] + "' or s.rstatus='"
-					+ optioncheck[2] + "' or s.rstatus='" + optioncheck[3] + "'"
+					+ "join rstatus s on r.rstatuscode = s.rstatuscode "
+					+ "join Wtime w on r.wtcode = w.wtcode "
+					+ "where s.rstatus='" + option + "'"
 					+ "ORDER BY r.rnum DESC) where rn between ? and ?";
 
 		}
@@ -191,6 +212,33 @@ public class ManagerBoardDao {
 		}
 
 		return list;
+	}
+	
+	// 게시물 변경 - 산책
+	public int wcommmit(int rnum, int rstatuscode) {
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		int count = 0;
+		try {
+			conn = ConnectionHelper.getConnection("oracle");
+			String sql = "update Reserv_w set rstatuscode=? where rnum=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, rstatuscode);
+			pstmt.setInt(2, rnum);
+			count = pstmt.executeUpdate();
+			
+		} catch (Exception e) {
+
+		} finally {
+			try {
+				ConnectionHelper.close(pstmt);
+				ConnectionHelper.close(conn);
+			} catch (Exception e) {
+
+			}
+		}
+		return count;
 	}
 
 	// ---------------- VisitingService ----------------
@@ -281,23 +329,85 @@ public class ManagerBoardDao {
 
 		return list;
 	}
+	
+	
+	// 검색 총 건수 구하기
+			public int vsearchBoardCount(String option, String pet) {
+
+				Connection conn = null;
+				PreparedStatement pstmt = null;
+				ResultSet rs = null;
+				String sql="";
+				int totalcount = 0;
+				try {
+					conn = ConnectionHelper.getConnection("oracle");
+					if(option.equals("all")){
+						if(pet.equals("all")){
+							sql = "select count(*) cnt from Reserv_v";
+							pstmt = conn.prepareStatement(sql);
+							rs = pstmt.executeQuery();
+							if (rs.next()) {
+								totalcount = rs.getInt("cnt");
+							}
+						}else {
+							sql = "select count(*) cnt from Reserv_v where pet=?";
+							pstmt = conn.prepareStatement(sql);
+							pstmt.setString(1, pet);
+							rs = pstmt.executeQuery();
+							if (rs.next()) {
+								totalcount = rs.getInt("cnt");
+							}
+						}
+						
+
+					}else {
+						if(pet.equals("all")) {
+							sql = "select count(*) cnt from Reserv_v v join Rstatus r on v.rstatuscode = r.rstatuscode "
+									   + "where rstatus =?";
+							pstmt = conn.prepareStatement(sql);
+							pstmt.setString(1, option);
+							rs = pstmt.executeQuery();
+							if (rs.next()) {
+								totalcount = rs.getInt("cnt");
+							}
+						}else {
+							sql = "select count(*) cnt from Reserv_v v join Rstatus r on v.rstatuscode = r.rstatuscode "
+									   + "where rstatus =? and pet =?";
+							pstmt = conn.prepareStatement(sql);
+							pstmt.setString(1, option);
+							pstmt.setString(2, pet);
+							rs = pstmt.executeQuery();
+							if (rs.next()) {
+								totalcount = rs.getInt("cnt");
+							}
+						}
+
+					}
+					
+
+				} catch (Exception e) {
+
+				} finally {
+					try {
+						ConnectionHelper.close(pstmt);
+						ConnectionHelper.close(rs);
+						ConnectionHelper.close(conn);
+					} catch (Exception e) {
+
+					}
+				}
+				return totalcount;
+			}
 
 	// 게시물 검색 - 방문
-	public List<VisitingBoard> vSearchBoard(String[] option, String pet, int cpage, int pagesize) {
+	public List<VisitingBoard> vSearchBoard(String option, String pet, int cpage, int pagesize) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		List<VisitingBoard> list = null;
 		String sql = "";
-		String petword = "";
 
-		if (pet.equals("dog")) {
-			petword = "개";
-		} else if (pet.equals("cat")) {
-			petword = "고양이";
-		}
-
-		if (option.length == 0) {
+		if (option.equals("all")) {
 
 			if (pet.equals("all")) {
 				sql = "select * from (select rownum rn, r.rnum, r.pet, r.email, m.mphone, m.madd, r.sdate, r.edate, r.price, r.rdate, s.rstatus, r.useday "
@@ -307,47 +417,25 @@ public class ManagerBoardDao {
 			} else {
 				sql = "select * from (select rownum rn, r.rnum, r.pet, r.email, m.mphone, m.madd, r.sdate, r.edate, r.price, r.rdate, s.rstatus, r.useday "
 						+ "from Reserv_V r join Member m on r.email = m.email "
-						+ "join rstatus s on r.rstatuscode = s.rstatuscode " + "where r.pet='" + petword + "' "
+						+ "join rstatus s on r.rstatuscode = s.rstatuscode " + "where r.pet='" + pet + "' "
 						+ "ORDER BY r.rnum DESC) where rn between ? and ?";
 			}
 
 		} else {
-			String[] optioncheck = new String[4];
 
-			switch (option.length) {
-			case 1:
-				optioncheck[0] = option[0];
-				break;
-			case 2:
-				optioncheck[0] = option[0];
-				optioncheck[1] = option[1];
-				break;
-			case 3:
-				optioncheck[0] = option[0];
-				optioncheck[1] = option[1];
-				optioncheck[2] = option[2];
-				break;
-			case 4:
-				optioncheck[0] = option[0];
-				optioncheck[1] = option[1];
-				optioncheck[2] = option[2];
-				optioncheck[3] = option[3];
-				break;
-			}
 
 			if (pet.equals("all")) {
 				sql = "select * from (select rownum rn, r.rnum, r.pet, r.email, m.mphone, m.madd, r.sdate, r.edate, r.price, r.rdate, s.rstatus, r.useday "
 						+ "from Reserv_V r join Member m on r.email = m.email "
-						+ "join rstatus s on r.rstatuscode = s.rstatuscode " + "where s.rstatus='" + optioncheck[0]
-						+ "' or s.rstatus='" + optioncheck[1] + "' or s.rstatus='" + optioncheck[2] + "' or s.rstatus='"
-						+ optioncheck[3] + "' " + "ORDER BY r.rnum DESC) where rn between ? and ?";
+						+ "join rstatus s on r.rstatuscode = s.rstatuscode "
+						+ "where s.rstatus='" + option
+						+  "' ORDER BY r.rnum DESC) where rn between ? and ?";
 			} else {
 				sql = "select * from (select rownum rn, r.rnum, r.pet, r.email, m.mphone, m.madd, r.sdate, r.edate, r.price, r.rdate, s.rstatus, r.useday "
 						+ "from Reserv_V r join Member m on r.email = m.email "
-						+ "join rstatus s on r.rstatuscode = s.rstatuscode " + "where r.pet='" + petword + "' "
-						+ "AND where s.rstatus='" + optioncheck[0] + "' or s.rstatus='" + optioncheck[1]
-						+ "' or s.rstatus='" + optioncheck[2] + "' or s.rstatus='" + optioncheck[3] + "' "
-						+ "ORDER BY r.rnum DESC) where rn between ? and ?";
+						+ "join rstatus s on r.rstatuscode = s.rstatuscode "
+						+ "where r.pet='" + pet + "' "
+						+ "AND s.rstatus='" + option + "' ORDER BY r.rnum DESC) where rn between ? and ?";
 			}
 
 		}
@@ -372,12 +460,12 @@ public class ManagerBoardDao {
 				board.setEmail(rs.getString("email"));
 				board.setMphone(rs.getString("mphone"));
 				board.setMadd(rs.getString("madd"));
+				board.setPet(rs.getString("pet"));
 				board.setSdate(rs.getDate("sdate"));
 				board.setEdate(rs.getDate("edate"));
 				board.setPrice(rs.getInt("price"));
 				board.setRdate(rs.getDate("rdate"));
 				board.setRstatus(rs.getString("rstatus"));
-				board.setPet(rs.getString("pet"));
 				board.setUseday(rs.getInt("useday"));
 
 				list.add(board);
@@ -397,6 +485,35 @@ public class ManagerBoardDao {
 
 		return list;
 	}
+	
+	
+	// 게시물 변경 - 방문
+	public int vcommmit(int rnum, int rstatuscode) {
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		int count = 0;
+		try {
+			conn = ConnectionHelper.getConnection("oracle");
+			String sql = "update Reserv_v set rstatuscode=? where rnum=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, rstatuscode);
+			pstmt.setInt(2, rnum);
+			count = pstmt.executeUpdate();
+			
+		} catch (Exception e) {
+
+		} finally {
+			try {
+				ConnectionHelper.close(pstmt);
+				ConnectionHelper.close(conn);
+			} catch (Exception e) {
+
+			}
+		}
+		return count;
+	}
+	
 
 	// ---------------- MemberBoardService ----------------
 
@@ -541,6 +658,40 @@ public class ManagerBoardDao {
 
 		return list;
 	}
+	
+	// 회원 검색 카운터
+	public int searchBoardCount(String option, String searchword) {
+
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		int totalcount = 0;
+		try {
+			String optional = option.substring(2);
+			conn = ConnectionHelper.getConnection("oracle");
+			String sql = "select count(*) cnt from Member "
+					+ "where (" + optional + " like '%"
+					+ searchword + "' or " + optional + " like '" + searchword + "%' or " + optional + " like '%"
+					+ searchword + "%')";
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				totalcount = rs.getInt("cnt");
+			}
+		} catch (Exception e) {
+
+		} finally {
+			try {
+				ConnectionHelper.close(pstmt);
+				ConnectionHelper.close(rs);
+				ConnectionHelper.close(conn);
+			} catch (Exception e) {
+
+			}
+		}
+		return totalcount;
+	}
+	
 
 	// 회원 삭제
 	public int deleteMember(String[] num) {
@@ -549,15 +700,58 @@ public class ManagerBoardDao {
 		conn = ConnectionHelper.getConnection("oracle");
 		int resultrow = 0;
 		PreparedStatement pstmt = null;
-		String sql = "delete from Member where email = ?";
+		
+		String sqlmc = "delete from Mcount where email = ?";
+		String sqlr = "delete from Rboard where email = ?";
+		String sqlv = "delete from Reserv_V where email = ?";
+		String sqlw = "delete from Reserv_W where email = ?";
+		String sqlm = "delete from Member where email = ?";
 
 		try {
-			pstmt = conn.prepareStatement(sql);
+			pstmt = conn.prepareStatement(sqlmc);
 
 			for (int i = 0; i < num.length; i++) {
 				pstmt.setString(1, num[i]);
 				resultrow += pstmt.executeUpdate(); // 반영된 행의 수
 			}
+			
+			pstmt.close();
+			
+			pstmt = conn.prepareStatement(sqlr);
+
+			for (int i = 0; i < num.length; i++) {
+				pstmt.setString(1, num[i]);
+				resultrow += pstmt.executeUpdate(); // 반영된 행의 수
+			}
+			
+			pstmt.close();
+			
+			pstmt = conn.prepareStatement(sqlv);
+
+			for (int i = 0; i < num.length; i++) {
+				pstmt.setString(1, num[i]);
+				resultrow += pstmt.executeUpdate(); // 반영된 행의 수
+			}
+			
+			pstmt.close();
+			
+			pstmt = conn.prepareStatement(sqlw);
+
+			for (int i = 0; i < num.length; i++) {
+				pstmt.setString(1, num[i]);
+				resultrow += pstmt.executeUpdate(); // 반영된 행의 수
+			}
+			
+			pstmt.close();
+			
+			pstmt = conn.prepareStatement(sqlm);
+
+			for (int i = 0; i < num.length; i++) {
+				pstmt.setString(1, num[i]);
+				resultrow += pstmt.executeUpdate(); // 반영된 행의 수
+			}
+			
+			pstmt.close();
 
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -615,6 +809,67 @@ public class ManagerBoardDao {
 		}
 
 		return list;
+	}
+	
+	public ArrayList<Integer> chartlist() {
+
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		ArrayList<Integer> totalcount = new ArrayList<Integer>();
+		try {
+			conn = ConnectionHelper.getConnection("oracle");
+			// 산책 리스트 (월별)
+			String sql_w_m = "select count(*) cnt from Reserv_w where rstatuscode = 3 and Extract(month from udate)=?";
+
+			for(int i = 7; i<10 ; i++) {
+				pstmt = conn.prepareStatement(sql_w_m);
+				pstmt.setInt(1, i);
+				rs = pstmt.executeQuery();
+				if (rs.next()) {
+					totalcount.add(rs.getInt("cnt"));
+				}
+				pstmt.close();
+			}
+			
+			// 돌봄 리스트 (개 - 월별)
+			String sql_v_d_m = "select count(*) cnt from Reserv_v where pet='개' and rstatuscode = 3 and Extract(month from sdate)=?";
+			
+			for(int i = 7; i<10 ; i++) {
+				pstmt = conn.prepareStatement(sql_v_d_m);
+				pstmt.setInt(1, i);
+				rs = pstmt.executeQuery();
+				if (rs.next()) {
+					totalcount.add(rs.getInt("cnt"));
+				}
+				pstmt.close();
+			}
+
+			// 돌봄 리스트 (개 - 월별)
+			String sql_v_c_m = "select count(*) cnt from Reserv_v where pet='고양이' and rstatuscode = 3 and Extract(month from sdate)=?";
+
+			for(int i = 7; i<10 ; i++) {
+				pstmt = conn.prepareStatement(sql_v_c_m);			
+				pstmt.setInt(1, i);
+				rs = pstmt.executeQuery();
+				while (rs.next()) {
+					totalcount.add(rs.getInt("cnt"));
+				}
+				pstmt.close();
+			}
+			
+		} catch (Exception e) {
+
+		} finally {
+			try {
+				ConnectionHelper.close(pstmt);
+				ConnectionHelper.close(rs);
+				ConnectionHelper.close(conn);
+			} catch (Exception e) {
+
+			}
+		}
+		return totalcount;
 	}
 
 }

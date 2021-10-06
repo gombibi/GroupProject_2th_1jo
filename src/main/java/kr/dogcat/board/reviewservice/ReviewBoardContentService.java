@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletResponse;
 import kr.dogcat.action.Action;
 import kr.dogcat.action.ActionForward;
 import kr.dogcat.dao.ReviewBoardDao;
-import kr.dogcat.dto.ReviewBoard;
 
 public class ReviewBoardContentService implements Action {
 

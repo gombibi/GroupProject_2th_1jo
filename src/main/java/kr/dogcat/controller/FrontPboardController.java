@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import kr.dogcat.action.Action;
 import kr.dogcat.action.ActionForward;
-import kr.dogcat.service.pboard.BestPhotoService;
 import kr.dogcat.service.pboard.PboardContentService;
 import kr.dogcat.service.pboard.PboardDeleteService;
 import kr.dogcat.service.pboard.PboardEditOkService;
@@ -40,11 +39,6 @@ public class FrontPboardController extends HttpServlet {
     		action = new PboardListService();
     		forward = action.execute(request, response);
     		System.out.println("PboardListService 실행");
-    		
-    	}else if(url_Command.equals("/BestPhoto.pg")) { //BEST PHOTO - heart 많은 글 3개 불러오기
-    		action = new BestPhotoService();
-    		forward = action.execute(request, response);
-    		System.out.println("BestPhotoService 실행");
     		
     	}else if(url_Command.equals("/PboardWrite.pg")) { //포토갤러리 글쓰기
     		forward = new ActionForward();
@@ -77,11 +71,6 @@ public class FrontPboardController extends HttpServlet {
     		forward = action.execute(request, response);
     		System.out.println("PboardDeleteService 실행");
     		
-    	}else if(url_Command.equals("/PboardDeleteOk.pg")) { //포토갤러리 글 삭제
-    		action = new PboardDeleteService();
-    		forward = action.execute(request, response);
-    		System.out.println("PboardDeleteOkService 실행");
-    		
     	}else if(url_Command.equals("/PboardReply.pg")) { //리뷰 작성
     		action = new PboardReplyService();
     		forward = action.execute(request, response);
@@ -94,6 +83,7 @@ public class FrontPboardController extends HttpServlet {
     		
     	}
     	       	
+    	
     	
     	if(forward != null) {
     		if(forward.isRedirect()) { //true 

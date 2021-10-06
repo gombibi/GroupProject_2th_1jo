@@ -2,12 +2,10 @@ package kr.dogcat.board.reviewservice;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import kr.dogcat.action.Action;
 import kr.dogcat.action.ActionForward;
 import kr.dogcat.dao.ReviewBoardDao;
-import kr.dogcat.dto.Member;
 
 public class ReviewBoardDeleteService implements Action {
 
@@ -17,28 +15,15 @@ public class ReviewBoardDeleteService implements Action {
 		int rbnum = Integer.parseInt(request.getParameter("rbnum"));
 		String cpage = request.getParameter("cp"); // 현재 페이지
 		
+		if (cpage == null || cpage.trim().equals("")) {
+			cpage = "1"; // 1번째 페이지 보겠다
+		}
+		
 		ActionForward forward = new ActionForward();
-		HttpSession session = request.getSession();
-		Member m = (Member)session.getAttribute("loginuser");
-		String useremail = m.getEmail();
 		
 		String msg="";
 		String url="";
 		
-		if(!useremail.equals("admin@dogcat.com")) {
-			msg="관리자만 삭제할 수 있습니다 !";
-			url="ReviewBoardList.bd?cp="+cpage;
-			
-			request.setAttribute("board_msg", msg);
-			request.setAttribute("board_url", url);
-			
-			forward = new ActionForward();
-			forward.setRedirect(false);
-			forward.setPath("/WEB-INF/views/board/redirect.jsp");
-			
-		}else {
-		
-		}
 		ReviewBoardDao rbd = new ReviewBoardDao();
 		try {
 			

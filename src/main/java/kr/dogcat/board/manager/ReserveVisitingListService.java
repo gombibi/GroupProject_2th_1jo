@@ -69,7 +69,7 @@ public class ReserveVisitingListService implements Action {
 
 			forward = new ActionForward();
 			forward.setRedirect(false); // forward
-			forward.setPath("/WEB-INF/views/board/board_list.jsp");
+			forward.setPath("/WEB-INF/views/admin/vreservlist.jsp");
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}

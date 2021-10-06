@@ -33,6 +33,7 @@ public class PboardReplyService implements Action {
 		String email = request.getParameter("email");
 		String mmcont = request.getParameter("mmcont");
 		String pbnum_fk = request.getParameter("pbnum");
+		System.out.println("reply: pbnum_fk : " + pbnum_fk);
     	
     	ActionForward forward = null;
     	

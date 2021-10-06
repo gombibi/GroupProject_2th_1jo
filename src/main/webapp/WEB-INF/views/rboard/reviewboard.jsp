@@ -67,7 +67,9 @@
 			
 			let form_data ={rbnum:$(this).attr("id")};
 			
-			if($('#'+clickrbnum+clickmnick).html()==""){
+			console.log('#'+clickrbnum+"_"+clickmnick);
+			
+			if($('#'+clickrbnum+clickmnick).html()=="" || $('#'+clickrbnum+"_"+clickmnick).html()=="" || $('#'+clickrbnum+"__"+clickmnick).html()=="" ){
 				
 				$.ajax(
 						{
@@ -78,21 +80,51 @@
 							success:function(responsedata){
 								let result = responsedata.trim();
 
-								$('#'+clickrbnum+clickmnick).html("<form id='editgo' action='ReviewBoardEdit.bd' method='post'></form>"
-										+"<td colspan='1' id='reviewboard_body_update'>"
-										+"<input form='editgo' type='hidden' name='rbnum' value='"+clickrbnum+"'>"
-										+"<input form='editgo' type='hidden' name='mnic' value='"+clickmnick+"'>"
-										+"<input form='editgo' type='hidden' name='cpage' value='${cpage}'>"
+								$('#'+clickrbnum+clickmnick).html(
+										"<td colspan='1' id='reviewboard_body_update'>"
+										+"<input form='editgo"+clickrbnum+"' type='hidden' name='rbnum' value='"+clickrbnum+"'>"
+										+"<input form='rego"+clickrbnum+"' type='hidden' name='rbnum' value='"+clickrbnum+"'>"
+										+"<input form='editgo"+clickrbnum+"' type='hidden' name='cp' value='${cpage}'>"
+										+"<input form='delgo"+clickrbnum+"' type='hidden' name='cp' value='${cpage}'>"
+										+"<input form='rego"+clickrbnum+"' type='hidden' name='cp' value='${cpage}'>"
 										+"</td>"
 										+"<td colspan='2' id='reviewboard_body_rbcont' style='background-color: #ddf0ef;' align='left'>"
 										+responsedata+"</td>"
 										+"<td colspan='2' id='reviewboard_body_rbcont' align='center'>"
-										+"<input form='editgo' type='submit' value='수정'>"
-										+"<form id='delgo' action='ReviewBoardDelete.bd' method='post'></form>"
-										+"<input form='delgo' type='submit' value='삭제'>"
-										+"<input form='delgo' type='hidden' name='rbnum' value='"+clickrbnum+"'>"
-										+"<form id='rego' action='ReviewBoardDelete.bd' method='post'></form>"
-										+"<input form='rego' type='button' value='답글'>"
+										+"<input form='editgo"+clickrbnum+"' type='submit' value='수정'>"
+										+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+										+"<input form='delgo"+clickrbnum+"' type='submit' value='삭제'>"
+										+"<input form='delgo"+clickrbnum+"' type='hidden' name='rbnum' value='"+clickrbnum+"'>"
+										+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+										+"<input form='rego"+clickrbnum+"' type='submit' value='답글'>"
+										+"</td>");
+								
+								$('#'+clickrbnum+"_"+clickmnick).html(
+										"<td colspan='1' id='reviewboard_body_update'>"
+										+"<input form='editgo"+clickrbnum+"' type='hidden' name='rbnum' value='"+clickrbnum+"'>"
+										+"<input form='editgo"+clickrbnum+"' type='hidden' name='cp' value='${cpage}'>"
+										+"<input form='delgo"+clickrbnum+"' type='hidden' name='cp' value='${cpage}'>"
+										+"<input form='rego"+clickrbnum+"' type='hidden' name='cp' value='${cpage}'>"
+										+"</td>"
+										+"<td colspan='2' id='reviewboard_body_rbcont' style='background-color: #ddf0ef;' align='left'>"
+										+responsedata+"</td>"
+										+"<td colspan='2' id='reviewboard_body_rbcont' align='center'>"
+										+"<input form='editgo"+clickrbnum+"' type='submit' value='수정'>"
+										+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+										+"<input form='delgo"+clickrbnum+"' type='submit' value='삭제'>"
+										+"<input form='delgo"+clickrbnum+"' type='hidden' name='rbnum' value='"+clickrbnum+"'>"
+										+"</td>");
+								
+								$('#'+clickrbnum+"__"+clickmnick).html(
+										"<td colspan='1' id='reviewboard_body_update'>"
+										+"<input form='editgo"+clickrbnum+"' type='hidden' name='rbnum' value='"+clickrbnum+"'>"
+										+"<input form='editgo"+clickrbnum+"' type='hidden' name='cp' value='${cpage}'>"
+										+"<input form='delgo"+clickrbnum+"' type='hidden' name='cp' value='${cpage}'>"
+										+"<input form='rego"+clickrbnum+"' type='hidden' name='cp' value='${cpage}'>"
+										+"</td>"
+										+"<td colspan='2' id='reviewboard_body_rbcont' style='background-color: #ddf0ef;' align='left'>"
+										+responsedata+"</td>"
+										+"<td colspan='2' id='reviewboard_body_rbcont' align='center'>"
 										+"</td>");
 
 							},
@@ -105,6 +137,8 @@
 			}else{
 				
 				$('#'+clickrbnum+clickmnick).html("");
+				$('#'+clickrbnum+"_"+clickmnick).html("");
+				$('#'+clickrbnum+"__"+clickmnick).html("");
 				
 			}
 			 
@@ -123,16 +157,16 @@
 	<c:set var="list" value="${requestScope.list}"></c:set>
 	<c:set var="totalboardcount" value="${requestScope.totalboardcount}"></c:set>
 	<c:set var="pager" value="${requestScope.pager}"></c:set>
-	<c:set var="login" value="${sessionScope.userid}" />
+	<c:set var="usernic" value="${loginUser.mnic}"/>
 	<jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
 
 	<div id="reveiwBoardListContainer">
 		<h1>리뷰 게시판</h1>
-		<h3>리뷰를 써주세요 어쩌구</h3>
 		<div style="text-align: center">
 			<table id="reviewboard" align="center">
 				<tr id="review_write_btn">
-					<td colspan="4" align="center"></td>
+					<td colspan="4" align="center">
+					</td>
 					<td colspan="1" align="center">총 게시물 수 : ${totalboardcount}</td>
 				</tr>
 				<tr id="reviewboard_header">
@@ -163,7 +197,31 @@
 								test="${board.point == 1}"> 💙🤍🤍🤍🤍 </c:if></td>
 						<td align="center">${board.rbdate}</td>
 					</tr>
-					<tr id="${board.rbnum}${board.mnic}"></tr>
+					<tr>
+						<td colspan=5 style="padding:0px;">
+						<form id='editgo${board.rbnum}' action='ReviewBoardEdit.bd' method='post'></form>
+						<form id='delgo${board.rbnum}' action='ReviewBoardDelete.bd' method='post'></form>
+						<form id='rego${board.rbnum}' action='ReviewBoardRewrite.bd' method='post'></form>
+						</td>
+					</tr>
+
+					<c:choose>
+						<c:when test="${usernic=='관리자'}">
+							<tr id="${board.rbnum}${board.mnic}"></tr>
+						</c:when>
+						<c:when test="${usernic==board.mnic}">
+							<tr id="${board.rbnum}_${board.mnic}"></tr>
+						</c:when>
+						<c:when test="${usernic!=board.mnic}">
+							<tr id="${board.rbnum}__${board.mnic}"></tr>
+						</c:when>
+						<c:when test="${usernic==null}">
+							<tr id="${board.rbnum}__${board.mnic}"></tr>
+						</c:when>
+						<c:otherwise>
+							<tr id="${board.rbnum}__${board.mnic}"></tr>
+						</c:otherwise>
+					</c:choose>
 				</c:forEach>
 
 
@@ -174,7 +232,7 @@
 					<td colspan="4"></td>
 					<td colspan="1" align="center">
 						<button type="submit" class="about-view packages-btn"
-							onclick="location.href = 'ReviewBoardWrite.bd';">글쓰기</button>
+							onclick="location.href = 'ReviewBoardWrite.bd'">글쓰기</button>
 					</td>
 				</tr>
 			</table>

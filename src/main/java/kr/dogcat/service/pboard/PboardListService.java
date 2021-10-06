@@ -9,7 +9,6 @@ import javax.servlet.http.HttpSession;
 
 import kr.dogcat.action.Action;
 import kr.dogcat.action.ActionForward;
-import kr.dogcat.dao.MemberDao;
 import kr.dogcat.dao.PboardDao;
 import kr.dogcat.dto.Member;
 import kr.dogcat.dto.Pboard;
@@ -20,21 +19,26 @@ public class PboardListService implements Action {
 	@Override
 	public ActionForward execute(HttpServletRequest request, HttpServletResponse response) {
 		
+		//로그인한 멤버 객체 불러오기
 		HttpSession session = request.getSession();
+		String useremail ="";
+		if(session.getAttribute("loginUser") != null) {
+			Member m = (Member)session.getAttribute("loginUser");
+			useremail = m.getEmail();
+		}
 
 		response.setContentType("text/html; charset=UTF-8");
 		
 		ActionForward forward = null;
-		
-		String msg = "";
-		String url = "";
+
 		
 		try {
-			PboardDao dao = new PboardDao();
-			int totalboardcount = dao.totalBoardCount();
-			
 			String ps = request.getParameter("ps"); //pagesize
 			String cp = request.getParameter("cp"); //current page
+			String keyword = request.getParameter("keyword"); //검색어
+			
+			PboardDao dao = new PboardDao();
+			int totalboardcount = dao.totalBoardCount(keyword);
 			
 			//List 페이지 처음 호출 ...
 			if(ps == null || ps.trim().equals("")){
@@ -59,7 +63,7 @@ public class PboardListService implements Action {
 			}
 			
 			//전체 목록 가져오기
-			List<Pboard> list = dao.lists(cpage, pagesize);
+			List<Pboard> list = dao.lists(useremail,keyword,cpage, pagesize);
 			
 			PrintWriter out = response.getWriter();
 			
@@ -67,7 +71,7 @@ public class PboardListService implements Action {
      			out.print("<tr><td colspan='5'>데이터가 없습니다</td></tr>");
      		}
 			
-			int pagersize = 1; //[1]
+			int pagersize = 3; //[1]
 			ThePager pager = new ThePager(totalboardcount,cpage,pagesize,pagersize,"PboardList.pg");
 			
 			request.setAttribute("pagesize", pagesize);

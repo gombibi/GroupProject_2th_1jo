@@ -37,7 +37,6 @@ public class PboardReplyDeleteService implements Action {
 		String url = "";
     	
     	try {
-			if(!(replyemail==useremail)) {
 
 			PrintWriter out = response.getWriter();
 			
@@ -66,18 +65,6 @@ public class PboardReplyDeleteService implements Action {
 			forward = new ActionForward();
 			forward.setRedirect(false);
 			forward.setPath("/WEB-INF/views/redirect.jsp");
-			
-			}else {
-				msg = "작성자만 삭제가 가능합니다";
-				url = "PboardContent.pg?pbnum=\" + pbnum_fk";
-				
-				request.setAttribute("board_msg",msg);
-			    request.setAttribute("board_url", url);
-			
-			    forward = new ActionForward();
-			    forward.setRedirect(false);
-			    forward.setPath("/WEB-INF/views/redirect.jsp");
-			}
 			
 		} catch (IOException e) {
 			e.printStackTrace();

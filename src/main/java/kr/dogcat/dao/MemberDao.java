@@ -42,7 +42,38 @@ public class MemberDao {
 		}
 	}
 	return resultrow;
-}
+	}
+	
+	//회원가입 시 예약관리 테이블 생성
+	public int insertMcount(String email) {
+	Connection conn = null;// 추가
+	int resultrow = 0;
+	PreparedStatement pstmt = null;
+
+	try {
+		conn = ConnectionHelper.getConnection("oracle");// 추가
+
+		String sql = "insert into Mcount(email,count,totalp) values(?,?,?)";
+		pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, email);
+		pstmt.setInt(2, 0);
+		pstmt.setInt(3, 0);
+
+		resultrow = pstmt.executeUpdate();
+
+	} catch (Exception e) {
+		System.out.println("Insert : " + e.getMessage());
+	} finally {
+		ConnectionHelper.close(pstmt);
+		ConnectionHelper.close(conn);
+		try {
+			conn.close(); // 반환하기
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	return resultrow;
+	}
 
 	//로그인 시 email pwd 체크
 	public boolean checkEmailPwd(String email, String mpwd) {
@@ -118,6 +149,42 @@ public class MemberDao {
 		}
 		return isEmail;
 	}
+	
+	//닉네임 존재 유무 판단
+		public String isCheckByNick(String mnic) {
+			Connection conn = null;// 추가
+			String isNick = null;
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			try {
+				conn = ConnectionHelper.getConnection("oracle");// 추가
+				String sql = "select mnic from Member where mnic=?";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, mnic);
+
+				rs = pstmt.executeQuery();
+
+				if (rs.next()) {
+					isNick = "false";
+				} else {
+					isNick = "true";
+				}
+
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+			} finally {
+				ConnectionHelper.close(rs);
+				ConnectionHelper.close(pstmt);
+				ConnectionHelper.close(conn);
+				try {
+					conn.close();// 반환하기
+				} catch (SQLException e) {
+
+					e.printStackTrace();
+				}
+			}
+			return isNick;
+		}
 	
 	//로그인 시 email로 회원정보 담은 Member 객체 가져오기
 	public Member getMemberInfoByEmail(String email) {

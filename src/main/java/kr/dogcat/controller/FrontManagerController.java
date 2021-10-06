@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import kr.dogcat.action.Action;
 import kr.dogcat.action.ActionForward;
+import kr.dogcat.board.manager.AllCountingListService;
 import kr.dogcat.board.manager.MemberManageDeleteService;
 import kr.dogcat.board.manager.MemberManageListService;
 import kr.dogcat.board.manager.MemberManageSearchService;
@@ -40,48 +41,52 @@ public class FrontManagerController extends HttpServlet {
     	Action action=null;
     	ActionForward forward=null;
     	
-    	if(url_Command.equals("/ReserveWalkingList.mb")) { // 산책 예약 게시판 보기 -- 완료
+    	if(url_Command.equals("/ReserveWalkingList.mb")) { // 산책 예약 게시판 보기 -- 연결완료
     		action = new ReserveWalkingListService();
     		forward = action.execute(request, response);
     		
-    	}else if(url_Command.equals("/ReserveWalkingSearch.mb")) { // 산책 예약 검색 -- 완료
+    	}else if(url_Command.equals("/ReserveWalkingSearch.mb")) { // 산책 예약 검색 -- 연결완료
     		action = new ReserveWalkingSearchService();
     		forward = action.execute(request, response);
     			
-    	}else if(url_Command.equals("/ReserveWalkingCommit.mb")) { // 산책 예약 변경
+    	}else if(url_Command.equals("/ReserveWalkingCommit.mb")) { // 산책 예약 변경 -- 연결완료
     		action = new ReserveWalkingCommitService();
     		forward = action.execute(request, response);
 
     	/////////////////////////////////////////////////////////////////////////
     		
-    	}else if(url_Command.equals("/ReserveVisitingList.mb")) { // 방문 예약 게시판 보기 -- 완료
+    	}else if(url_Command.equals("/ReserveVisitingList.mb")) { // 방문 예약 게시판 보기 -- 연결완료
     		action = new ReserveVisitingListService();
     		forward = action.execute(request, response);
     		
-    	}else if(url_Command.equals("/ReserveVisitingSearch.mb")) { // 방문 예약 검색 -- 완료
+    	}else if(url_Command.equals("/ReserveVisitingSearch.mb")) { // 방문 예약 검색 -- 연결완료
     		action = new ReserveVisitingSearchService();
     		forward = action.execute(request, response);
 
-    	}else if(url_Command.equals("/ReserveVisitingCommit.mb")) { // 방문 예약 변경
+    	}else if(url_Command.equals("/ReserveVisitingCommit.mb")) { // 방문 예약 변경 -- 연결완료
     		action = new ReserveVisitingCommitService();
     		forward = action.execute(request, response);
     		
     	//////////////////////////////////////////////////////////////////////////
     		
-    	}else if(url_Command.equals("/MemberManageList.mb")) { // 회원 관리 목록 -- 완료
+    	}else if(url_Command.equals("/MemberManageList.mb")) { // 회원 관리 목록 -- 연결완료
     		action = new MemberManageListService();
     		forward = action.execute(request, response);
     		
-    	}else if(url_Command.equals("/MemberManageDelete.mb")) { // 회원 목록 삭제 -- 완료
+    	}else if(url_Command.equals("/MemberManageDelete.mb")) { // 회원 목록 삭제 -- 연결완료
     		action = new MemberManageDeleteService();
     		forward = action.execute(request, response);
     		
-    	}else if(url_Command.equals("/MemberManageSearch.mb")) { // 회원 id(email), 이름으로 검색 -- 완료
+    	}else if(url_Command.equals("/MemberManageSearch.mb")) { // 회원 id(email), 이름으로 검색 -- 연결완료
     		action = new MemberManageSearchService();
     		forward = action.execute(request, response);
 
     	}else if(url_Command.equals("/SitterManageList.mb")) { // 시터 목록 조회
     		action = new SitterManageListService();
+    		forward = action.execute(request, response);
+    		
+    	}else if(url_Command.equals("/AllCountingList.mb")) { // 내부 통계용 -- 연결완료
+    		action = new AllCountingListService();
     		forward = action.execute(request, response);
     	}
     	

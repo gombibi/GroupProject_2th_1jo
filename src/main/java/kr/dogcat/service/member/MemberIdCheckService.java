@@ -26,7 +26,7 @@ public class MemberIdCheckService implements Action {
 	    	
 	    	forward = new ActionForward();
 	    	forward.setRedirect(false);
-	    	forward.setPath("uservalid.jsp"); //front 페이지 주소 확인
+	    	forward.setPath("/WEB-INF/views/member/uservalid.jsp"); //front 페이지 주소 확인
 	    	
 		}catch (Exception e) {
 			System.out.println(e.getMessage());

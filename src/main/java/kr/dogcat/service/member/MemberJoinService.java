@@ -17,9 +17,11 @@ public class MemberJoinService implements Action {
 		String mnic = request.getParameter("mnic"); 
 		String mname = request.getParameter("mname"); 
 		String mpwd = request.getParameter("mpwd"); 
-		String madd = request.getParameter("madd"); 
+		String madd1 = request.getParameter("madd1");  
+		String madd2 = request.getParameter("madd2"); 
+		String madd3 = request.getParameter("madd3");
 		String mphone = request.getParameter("mphone"); 
-    	
+    	String madd = madd1 + " " + madd2 + " " + madd3;
     	//memo m = new memo();  //권장사항
     	//m.setId(id);
     	
@@ -33,15 +35,18 @@ public class MemberJoinService implements Action {
 		
     	MemberDao dao = new MemberDao(); //POINT
 		int result = dao.insertMember(m);
+		
+		//mcount 테이블 insert
+		dao.insertMcount(email);
     	
 		 	String msg="";
 		 	String url="";
 		    if(result > 0){
 		    	msg ="가입성공";
-		    	url ="Main.jsp";
+		    	url ="index.jsp";
 		    }else{
 		    	msg="가입실패";
-		    	url="Main.jsp";
+		    	url="index.jsp";
 		    }
 		    
 		    request.setAttribute("board_msg",msg);
@@ -49,7 +54,7 @@ public class MemberJoinService implements Action {
 		
 		    ActionForward forward = new ActionForward();
 		    forward.setRedirect(false);
-		    forward.setPath("redirect.jsp");
+		    forward.setPath("/WEB-INF/views/redirect.jsp");
 		    
 		return forward;
 	}

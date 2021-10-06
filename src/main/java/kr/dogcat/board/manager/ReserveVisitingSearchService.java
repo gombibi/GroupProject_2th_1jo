@@ -9,16 +9,14 @@ import kr.dogcat.action.Action;
 import kr.dogcat.action.ActionForward;
 import kr.dogcat.dao.ManagerBoardDao;
 import kr.dogcat.dto.VisitingBoard;
-import kr.dogcat.dto.WalkingBoard;
 import kr.dogcat.utils.ThePagerVSearch;
-import kr.dogcat.utils.ThePagerWSearch;
 
 public class ReserveVisitingSearchService implements Action {
 
 	@Override
 	public ActionForward execute(HttpServletRequest request, HttpServletResponse response) {
 		ActionForward forward = null;
-		String[] option = request.getParameterValues("option");
+		String option = request.getParameter("option");
 		String pet = request.getParameter("pet");
 
 		try {
@@ -46,7 +44,7 @@ public class ReserveVisitingSearchService implements Action {
 			List<VisitingBoard> list = mbd.vSearchBoard(option, pet, cpage, pagesize); // list >> 1 , 20
 			
 			// 게시물 총 건수
-			int searchboardcount = list.size();
+			int searchboardcount = mbd.vsearchBoardCount(option,pet);
 
 			// 전체 페이지 결정 하기
 			if (searchboardcount % pagesize == 0) { // ex) 120개 % 5개 = 24
@@ -74,7 +72,7 @@ public class ReserveVisitingSearchService implements Action {
 
 			forward = new ActionForward();
 			forward.setRedirect(false); // forward
-			forward.setPath("/WEB-INF/views/board/board_list.jsp");
+			forward.setPath("/WEB-INF/views/admin/vreservlist.jsp");
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}

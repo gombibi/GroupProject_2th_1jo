@@ -9,7 +9,7 @@
 	<c:out value="<script>alert('로그인 후 글쓰기가 가능합니다');</script>"
 		escapeXml="false" />
 	<script>
-		location.href = '/WEB-INF/views/login.jsp'
+		location.href = "login.jsp"
 	</script> //주소 확인하기
 </c:if>
 
@@ -118,8 +118,74 @@
 	rel="stylesheet">
 <script
 	src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+<style>
+@import
+	url('https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap')
+	;
+</style>
+<style type="text/css">
+
+#reveiwBoardListContainer{
+	padding-top: 100px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	font-family: 'Noto Sans KR', sans-serif;
+    border-collapse:collapse;
+	
+}
+
+input:not([type=button], [type=reset], #pfilename) {
+	width: 100%;
+	height: 30px;
+	border: solid 2px #00d8d5;
+	border-radius: 8px;
+	display: flex;
+	padding: 5px;
+}
+
+
+h1 {
+	font-family: 'jua';
+	padding-bottom: 20px;
+}
+
+#pwrite{
+	width: 800px;
+	font-family: 'Noto Sans KR', sans-serif;
+}
+
+th,td{
+	padding: 5px;
+    border: 5px;
+}
+
+#pboard_btn{
+  align-items: center;
+  background: #00d8ff;
+  border: 1px solid #00d8ff;
+  width: 110px;
+  height: 35px;
+  font-size: 14px;
+  color: #fff;
+  font-family: "Poppins", sans-serif;
+  text-transform: uppercase;
+  border-radius: 5px;
+  box-shadow: 0 5px 20px rgba(14, 15, 18, 0.2);
+}
+
+#pboard_td{
+	width: 15%;
+	text-align: center;
+	font-size: 17px;
+}
+
+
+</style>
 
 <script type="text/javascript">
+	
 	$(document).ready(function() {
 		$('#pfilename').on("change", fileChange);
 		$('#summernote').summernote({
@@ -143,6 +209,40 @@
 			reader.readAsDataURL(f);
 		})
 	}
+
+	function check() {
+		var filename = bbs.pfilename.value.trim();
+		if (!bbs.pbsubj.value) {
+			alert("제목을 입력하세요");
+			bbs.pbsubj.focus();
+			return false;
+		}
+		if (!bbs.pbcont.value) {
+			alert("글 내용을 입력하세요");
+			bbs.pbcont.focus();
+			return false;
+		}
+
+		//첨부파일
+		if (filename.length == 0) {
+			alert("첨부파일을 선택하세요.");
+			return false;
+		} else {
+			var dot = filename.lastIndexOf(".");
+			var ext = filename.substr(dot + 1);
+			ext = ext.toLowerCase();
+
+			//확장자 제한
+
+			if (ext == "png" || ext == "jpg" || ext == "gif") {
+				document.bbs.submit();
+				
+			} else {
+				alert("이미지 파일만 가능합니다.");
+				return false;
+			}
+		}
+	}
 </script>
 
 </head>
@@ -156,44 +256,42 @@
 		<form name="bbs" action="PboardWriteOk.pg" method="POST"
 			enctype="multipart/form-data">
 
-			<table>
-
+			<table id="pwrite">
 				<tr>
-					<td width="20%" align="center">제목</td>
-					<td width="80%" align="left"><input type="text" name="pbsubj"
-						size="40"></td>
+					<td id="pboard_td">제  목</td>
+					<td width="80%" align="left"><input type="text" name="pbsubj"></td>
 				</tr>
 				<tr>
-					<td width="20%" align="center">글쓴이</td>
+					<td id="pboard_td">글쓴이</td>
 					<td width="80%" align="left"><input type="text" name="mnic"
-						size="40" value="${luser.mnic}" readonly></td>
+						value="${luser.mnic}" readonly></td>
 				</tr>
 				<tr>
-					<td width="20%" align="center">이메일</td>
+					<td id="pboard_td">이메일</td>
 					<td width="80%" align="left"><input type="text" name="email"
-						size="40" value="${luser.email}" readonly></td>
+						value="${luser.email}" readonly></td>
 				</tr>
 				<tr>
-					<td width="20%" align="center">글내용</td>
+					<td id="pboard_td">글내용</td>
 					<td width="80%" align="left"><textarea rows="10" cols="60"
 							name="pbcont" class="ckeditor" id="summernote"></textarea></td>
 				</tr>
 				<!-- 첨부파일 <file> 파일 id값 설정 -->
 				<tr>
-					<td width="20%" align="center">첨부파일</td>
+					<td id="pboard_td">첨부파일</td>
 					<td width="80%" align="left"><input type="file" id="pfilename"
 						name="pfilename"></td>
 				</tr>
 				<tr>
-					<td width="20%" align="center">미리보기</td>
+					<td id="pboard_td">미리보기</td>
 					<td width="80%" align="left"><img id="preview" src=""
 						width="300" alt=""></td>
 				</tr>
 				<!-- 첨부파일 <file> 미리보기 tr 추가-->
 				<tr>
 					<td colspan="2" align="center"><input type="button"
-						value="글쓰기" onclick="check();" /> <input type="reset"
-						value="다시쓰기" /></td>
+						value="글쓰기" onclick="check();" id="pboard_btn"/> <input type="reset"
+						value="다시쓰기" id="pboard_btn"/></td>
 				</tr>
 			</table>
 		</form>

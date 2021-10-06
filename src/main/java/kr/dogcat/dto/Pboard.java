@@ -15,6 +15,7 @@ public class Pboard {
 	private int heart;
 	
 	private String mnic;
+	private String gubun;
 
 
 	public Pboard() {
@@ -105,5 +106,14 @@ public class Pboard {
 	public void setMnic(String mnic) {
 		this.mnic = mnic;
 	}
+
+	public String getGubun() {
+		return gubun;
+	}
+
+	public void setGubun(String gubun) {
+		this.gubun = gubun;
+	}
+	
 	
 }

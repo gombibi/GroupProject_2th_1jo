@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="c"  uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!DOCTYPE html>
 <html>
@@ -125,8 +125,8 @@ td {
 			style="width: 400px; height: 200px; margin-left: auto; margin-right: auto;">
 			<tr>
 				<th>ID(email):</th>
-				<td><input type="text" name="email" id="email"> <input
-					type="button" value="중복체크" id="message"></td>
+				<td><input type="text" name="email" id="email"> 
+					<input type="button" value="중복체크" id="message"></td>
 			</tr>
 			<tr>
 				<th>중복체크:</th>

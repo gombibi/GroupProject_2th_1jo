@@ -61,6 +61,9 @@ public class PboardContentService implements Action {
 			request.setAttribute("pbnum", pbnum);
 			request.setAttribute("pboard", pboard);
 			
+			System.out.println("pbnum : " + pbnum);
+
+			
 			List<Memo> replylist = dao.replylist(pbnum);
 			System.out.println(replylist);			
 			request.setAttribute("replylist", replylist);

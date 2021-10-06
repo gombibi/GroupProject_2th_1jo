@@ -6,26 +6,37 @@ public class ThePagerVSearch {
 	 private int dataCount;//총 데이터 수
 	 private int currentPage;//현재 페이지 번호
 	 private int pageCount;//총 페이지 수
-	 private String[] option=new String[4];//검색 옵션
-	 private String pet;
+	 private String option;//검색 옵션
+	 private String pet;//검색 단어
 	 
 	 private String linkUrl;//페이저가 포함되는 페이지의 주소
 	 
-	 public ThePagerVSearch(String[] option, String pet, int dataCount, int currentPage, 
+	 public ThePagerVSearch(String option, String pet, int dataCount, int currentPage, 
 	  int pageSize, int pagerSize, String linkUrl) {
 	  
 	  this.linkUrl = linkUrl;
 	  
 	  this.option = option;
+	  this.pet = pet;
 	  this.dataCount = dataCount; // 총 게시물 개수
 	  this.pageSize = pageSize; // 5 10 15 20
 	  this.pagerSize = pagerSize; // 3
 	  this.currentPage = currentPage; // 현재 페이지 
-	  pageCount = 
+	  this.pageCount = 
 	   (dataCount / pageSize) + ((dataCount % pageSize) > 0 ? 1 : 0);
 	  // 총 게시물 / 페이지사이즈(5 10 ..) +  나머지 (1) || 나누어 떨어지면 (0) 
 	  //     총 페이지 수
+	  
+	  System.out.println(option);
+	  System.out.println(pet);
+	  System.out.println(pageSize);
+	  System.out.println(pagerSize);
+	  System.out.println(currentPage);
+	  System.out.println(pageCount);
+	  
 	 }
+	 
+	 
 	 
 	 public String toString(){
 	  StringBuffer linkString = new StringBuffer();
@@ -33,11 +44,11 @@ public class ThePagerVSearch {
 	  //1. 처음, 이전 항목 만들기  -- 번호 리스트 좌측
 	  if (currentPage > 1) {
 	   linkString.append(
-	    String.format("[<a href='%s?cp=1?pet=%s&option=%s&option=%s&option=%s&option=%s'>처음</a>]",linkUrl,pet,option[0],option[1],option[2],option[3]));
+	    String.format("[<a href='%s?cp=1&option=%s&pet=%s'>처음</a>]",linkUrl,option,pet));
 	   linkString.append("&nbsp;");
 	   linkString.append("&nbsp;");
 	   linkString.append(String.format(
-	    "[<a href='%s?cp=%d?pet=%s&option=%s&option=%s&option=%s&option=%s'>이전</a>]", linkUrl, currentPage - 1,pet,option[0],option[1],option[2],option[3]));
+	    "[<a href='%s?cp=%d&option=%s&pet=%s'>이전</a>]", linkUrl, currentPage - 1,option,pet));
 	   linkString.append("&nbsp;");
 	  }
 	  
@@ -54,7 +65,7 @@ public class ThePagerVSearch {
 	    linkString.append(String.format("[%d]", i));
 	   } else { 
 	    linkString.append(String.format( // 그렇지 않으면 i에 해당하는 페이지에 해당하는 번호 형성 ( !!! [ ] 괄호 없음 )
-	     "<a href='%s?cp=%d?pet=%s&option=%s&option=%s&option=%s&option=%s'>%d</a>", linkUrl, i, i,pet,option[0],option[1],option[2],option[3]));
+	     "<a href='%s?cp=%d&option=%s&pet=%s'>%d</a>", linkUrl, i, option,pet, i));
 	   }
 	   linkString.append("&nbsp;");
 	  }
@@ -64,11 +75,11 @@ public class ThePagerVSearch {
 	  if (currentPage < pageCount) { // 현재페이지가 총 페이지보다 작다면
 	   linkString.append("&nbsp;");
 	   linkString.append(String.format(
-	    "[<a href='%s?cp=%d?pet=%s&option=%s&option=%s&option=%s&option=%s'>다음</a>]",linkUrl, currentPage + 1,pet,option[0],option[1],option[2],option[3])); // 다음으로 가는 페이지 형성
+	    "[<a href='%s?cp=%d&option=%s&pet=%s'>다음</a>]",linkUrl, currentPage + 1,option,pet)); // 다음으로 가는 페이지 형성
 	   linkString.append("&nbsp;");
 	   linkString.append("&nbsp;");
 	   linkString.append(String.format(
-	    "[<a href='%s?cp=%d?pet=%s&option=%s&option=%s&option=%s&option=%s'>마지막</a>]", linkUrl, pageCount,pet,option[0],option[1],option[2],option[3])); // 마지막으로 가는 페이지 형성
+	    "[<a href='%s?cp=%d&option=%s&pet=%s'>마지막</a>]", linkUrl, pageCount,option,pet)); // 마지막으로 가는 페이지 형성
 	  }
 	  
 	  return linkString.toString();

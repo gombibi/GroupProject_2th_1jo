@@ -111,12 +111,12 @@ public class ReviewBoardDao {
 		int row = 0;
 		try {
 			conn = ConnectionHelper.getConnection("oracle");
-			String sql = "insert into Rboard(rbnum, mnic, rbdate, rbsubj, rbcont, point, ref, depth, step)"
+			String sql = "insert into Rboard(rbnum, email, rbdate, rbsubj, rbcont, point, ref, depth, step)"
 					+ " values(Rboard_rbnum.nextval,?,sysdate,?,?,?,?, 0, 0)";
 			
 			pstmt = conn.prepareStatement(sql);
 
-			pstmt.setString(1, boarddata.getMnic());
+			pstmt.setString(1, boarddata.getEmail());
 			pstmt.setString(2, boarddata.getRbsubj());
 			pstmt.setString(3, boarddata.getRbcont());
 			pstmt.setInt(4, boarddata.getPoint());
@@ -224,6 +224,7 @@ public class ReviewBoardDao {
 
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
+				board = new ReviewBoard();
 				board.setRbnum(rs.getInt("rbnum"));
 				board.setRbsubj(rs.getString("rbsubj"));
 				board.setRbcont(rs.getString("rbcont"));
@@ -251,7 +252,12 @@ public class ReviewBoardDao {
 		int rbnum= Integer.parseInt(boarddata.getParameter("rbnum"));
 		String rbsubj= boarddata.getParameter("rbsubj");
 		String rbcont= boarddata.getParameter("rbcont");
-		int point= Integer.parseInt(boarddata.getParameter("point"));
+		int point = 0;
+		if(boarddata.getParameter("point")==null) {
+			point = 0;
+		}else {
+			point= Integer.parseInt(boarddata.getParameter("point"));
+		}
 		
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -294,7 +300,7 @@ public class ReviewBoardDao {
 		String rbsubj = "";
 		int row1 = 0;
 		int row2 = 0;
-		int rowsum = row1 + row2;
+		int rowsum = 0;
 
 		try {
 			conn = ConnectionHelper.getConnection("oracle");
@@ -304,32 +310,36 @@ public class ReviewBoardDao {
 
 			// 게시글 삭제
 			String sql_del = "delete from Rboard where rbnum=?";
-
+			
+			conn.setAutoCommit(false);
+			
 			pstmt = conn.prepareStatement(sql_rd);
 			pstmt.setInt(1, rbnum);
 			rs = pstmt.executeQuery();
 
 			if (rs.next()) {
+				
 				ref = rs.getInt("ref");
 				depth = rs.getInt("depth");
 				rbsubj = rs.getString("rbsubj");
+				
+				pstmt.close();
+			}
 
-				conn.setAutoCommit(false);
-
-				// 답글의 Rbsubj 변경
-				// 답글이 달리지 않은 경우 row1=0
-
-				row1 = rbsubjEdit(ref, depth, rbsubj);
-
-				// 게시글 삭제 (원본글)
-				pstmt = conn.prepareStatement(sql_del);
-				pstmt.setInt(1, rbnum);
-				row2 = pstmt.executeUpdate();
-
-				if (rowsum > 0) {
+			row1 = rbsubjEdit(ref, depth, rbsubj);
+			System.out.println("row1 :"+row1);
+			
+			// 게시글 삭제 (원본글)
+			pstmt = conn.prepareStatement(sql_del);
+			pstmt.setInt(1, rbnum);
+			row2 = pstmt.executeUpdate();
+			System.out.println("row2 :"+row2);
+			
+			rowsum = row1 + row2;
+			
+			System.out.println("rowsum :"+rowsum);
+			if (rowsum > 0) {
 					conn.commit(); // 두개의 진행상황 실반영
-				}
-
 			} else { // 삭제하는 글이 존재하지 않는 경우
 				rowsum = 0;
 			}
@@ -393,6 +403,9 @@ public class ReviewBoardDao {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		int result = 0;
+		int ref = 0;
+		int depth = 0;
+		int stepmax = 0;
 		try {
 			conn = ConnectionHelper.getConnection("oracle");
 
@@ -404,17 +417,20 @@ public class ReviewBoardDao {
 			String refer_depth_step_sal = "select ref , depth from Rboard where rbnum=?";
 
 			// 답글 insert
-			String sql = "insert into Rboard(rbnum, mnic, rbdate, rbsubj, rbcont, point, ref, depth, step)"
-					+ " values(Rboard_rbnum.nextval,'관리자',sysdate,?,?,0,?,?,?)";
+			String sql = "insert into Rboard(rbnum, email, rbdate, rbsubj, rbcont, point, ref, depth, step)"
+					+ " values(Rboard_rbnum.nextval,'admin@dogcat.com',sysdate,?,?,0,?,?,?)";
 
 			pstmt = conn.prepareStatement(refer_depth_step_sal);
 			pstmt.setInt(1, rbnum);
 			rs = pstmt.executeQuery();
 
 			if (rs.next()) { // 데이터가 있다면 ... 원본글의 refer , step , depth 존재
-				int ref = rs.getInt("ref");
-				int depth = rs.getInt("depth");
-				int stepmax = getStepMax(ref);
+				ref = rs.getInt("ref");
+				depth = rs.getInt("depth");
+				stepmax = getStepMax(ref);
+			
+				pstmt.close();
+			}
 
 				pstmt = conn.prepareStatement(sql);
 
@@ -431,7 +447,7 @@ public class ReviewBoardDao {
 					result = -1;
 				}
 
-			}
+			
 
 		} catch (Exception e) {
 			e.printStackTrace();

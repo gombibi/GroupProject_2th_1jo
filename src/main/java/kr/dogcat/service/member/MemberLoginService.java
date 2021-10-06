@@ -43,7 +43,7 @@ public class MemberLoginService implements Action {
 
 			} else {
 				msg = "로그인 실패";
-				url = "Login_temp.jsp"; //front 주소 확인
+				url = "login.jsp"; //front 주소 확인
 				
 				request.setAttribute("board_msg",msg);
 			    request.setAttribute("board_url", url);
